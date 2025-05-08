@@ -1,6 +1,11 @@
+import { Logout } from "./log-out"
+
 function HomePage() {
+  
   return (
-    <div>AuthenticatedPage</div>
+    <div>
+      <Logout />
+    </div>
   )
 }
 export default HomePage
