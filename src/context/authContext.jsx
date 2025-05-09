@@ -111,13 +111,19 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const isAdmin = () => {
+        if (!user) return false
+        return user.role === "admin"
+    }
+
     const values = {
         user,
         loading,
         authLoaded,
         register,
         logout,
-        login
+        login,
+        isAdmin
     }
 
     return (
