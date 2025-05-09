@@ -47,6 +47,7 @@ export const UserInfoForm = ({ user }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-10">
+        
         <FormField
           control={form.control}
           name="email"
@@ -60,6 +61,7 @@ export const UserInfoForm = ({ user }) => {
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="displayName"
@@ -73,6 +75,7 @@ export const UserInfoForm = ({ user }) => {
             </FormItem>
           )}
         />
+
         <Button disabled={loading} type="submit" className="self-end">{ loading ? "Laddar..." : "Ändra"}</Button>
       </form>
     </Form>
