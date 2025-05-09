@@ -2,6 +2,7 @@
 
 import { useAuth } from "@/context/authContext"
 import { Loader2Icon } from "lucide-react"
+import { Toaster } from "react-hot-toast"
 
 function ApplicationLayout({ authenticated, open }) {
 
@@ -24,6 +25,10 @@ function ApplicationLayout({ authenticated, open }) {
             ? open 
             : authenticated
         }
+        <Toaster 
+          position="top-center"
+          reverseOrder={false}
+        />
     </>
   )
 }

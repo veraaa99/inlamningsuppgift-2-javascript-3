@@ -2,9 +2,10 @@
 
 import { auth, db } from "@/lib/firebase"
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
-import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore"
+import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
+import toast from "react-hot-toast"
 
 const AuthContext = createContext()
 
@@ -116,6 +117,23 @@ export const AuthProvider = ({ children }) => {
         return user.role === "admin"
     }
 
+    const updateUser = async(user, newUserData) => {
+        setLoading(true)
+        const toastId = toast.loading("Laddar...")
+        try {
+            const useRef = doc(db, "users", user.uid)
+            await updateDoc(useRef, newUserData)
+            setUser((prevUser) => ({ ...prevUser, ...newUserData }))
+            toast.success("Profil uppdaterad", { id: toastId})
+            
+        } catch (error) {
+            toast.error("Någonting gick fel. Försök igen", { id: toastId })
+            console.error("Error updating the user: ", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const values = {
         user,
         loading,
@@ -123,7 +141,8 @@ export const AuthProvider = ({ children }) => {
         register,
         logout,
         login,
-        isAdmin
+        isAdmin,
+        updateUser
     }
 
     return (
