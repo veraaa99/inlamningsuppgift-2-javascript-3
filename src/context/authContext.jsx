@@ -1,7 +1,7 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase"
-import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
 import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
@@ -134,6 +134,36 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const changePassword = async(currentPassword, newPassword) => {
+        setLoading(true)
+        const toastId = toast.loading("Laddar...")
+        const user = auth.currentUser
+
+        if(!user) {
+            console.error("Ingen användare är inloggad")
+            toast.error("Ingen användare är inloggad", { id: toastId })
+            return
+        }
+
+        try {
+            const userCredential = await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, currentPassword))
+            await updatePassword(userCredential.user, newPassword)
+            toast.success("Lösenordet har uppdaterats!", { id: toastId })
+        } catch (error) {
+            console.error("Error reauthenticating user: ", error)
+             if(error.code === "auth/invalid-credential") {
+                toast.error("Fel lösenord", { id: toastId })
+            } else if (error.code === "auth/weak-password") {
+                toast.error("Lösenordet är för svagt", { id: toastId })
+            } else {
+                toast.error("Någonting gick fel, försök igen", { id: toastId })
+            }
+            throw error
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const values = {
         user,
         loading,
@@ -142,7 +172,8 @@ export const AuthProvider = ({ children }) => {
         logout,
         login,
         isAdmin,
-        updateUser
+        updateUser,
+        changePassword
     }
 
     return (

@@ -1,30 +1,39 @@
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { UserInfoForm } from "./user-info-form"
 import { ProfileImageUploader } from "./profile-image-uploader"
+import { ChangePaswordForm } from "./change-password-form"
 
 export const SettingsForm = ({ user, isOwnUser }) => {
   return (
     <>
-        <div className="space-y-10"> 
+        <div className="flex flex-col gap-10 justify-between lg:flex-row">
+            <div className="space-y-10 w-full"> 
+                {
+                    isOwnUser && (
+                        <div className="flex items-center justify-between lg:justify-stretch gap-10">
+                            <p className="font-semibold text-lg">Tema:</p>
+                            <ModeToggle />
+                        </div>
+                    )
+                }
+                <div className="flex items-center justify-between lg:justify-stretch gap-10">
+                    <p className="font-semibold text-lg">Kortfärg:</p>
+                    {/* TODO: Gör så att man kan ändra kortfärg */}
+                </div>
+
+                <UserInfoForm user={user}/>
+
+                <div className="flex items-center justify-between lg:justify-stretch gap-10">
+                    <p className="font-semibold text-lg">Profilbild:</p>
+                    <ProfileImageUploader />
+                </div>
+
+            </div>
+
             {
-                isOwnUser && (
-                    <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                        <p className="font-semibold text-lg">Tema:</p>
-                        <ModeToggle />
-                    </div>
-                )
+                isOwnUser && <ChangePaswordForm className="bg-green-800 w-full"/>
             }
-            <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                <p className="font-semibold text-lg">Kortfärg:</p>
-                {/* TODO: Gör så att man kan ändra kortfärg */}
-            </div>
 
-            <UserInfoForm user={user}/>
-
-            <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                <p className="font-semibold text-lg">Profilbild:</p>
-                <ProfileImageUploader />
-            </div>
         </div>
     </>
   )
