@@ -16,12 +16,13 @@ import { LogOutIcon, SettingsIcon } from "lucide-react"
 export const AvatarDropdown = () => {
 
     const { user, logout, isAdmin } = useAuth()
+    console.log(user.photoURL)
 
   return (
     <DropdownMenu>
         <DropdownMenuTrigger>
             <Avatar className="size-9 cursor-pointer">
-                <AvatarImage src={user?.photoUrl || ""} />
+                <AvatarImage src={user?.photoURL || ""} className="h-full w-full object-cover"/>
                 <AvatarFallback className="bg-gray-700/30">{user?.displayName?.slice(0,2).toUpperCase() || "TR"}</AvatarFallback>
             </Avatar>
         </DropdownMenuTrigger>

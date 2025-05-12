@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils"
 import { Poppins } from "next/font/google"
 import Link from "next/link"
 import { Button } from "./ui/button"
-import { AvatarDropdown } from "./avatar-downdown"
+import { AvatarDropdown } from "./avatar-dropdown"
 import { useAuth } from "@/context/authContext"
 
 const poppins = Poppins({
