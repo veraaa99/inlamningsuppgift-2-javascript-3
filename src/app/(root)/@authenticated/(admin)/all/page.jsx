@@ -1,6 +1,13 @@
+import { Header } from "@/components/header"
+
 function AllTasksPage() {
   return (
-    <div>AllTasksPage</div>
+    <>
+      <Header />
+      <div>
+        ALL
+      </div>
+    </>
   )
 }
 export default AllTasksPage
