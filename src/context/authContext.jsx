@@ -57,7 +57,7 @@ export const AuthProvider = ({ children }) => {
 
       })
 
-      return () => unsub()
+    //   return () => unsub()
     }, [])
     
     const register = async (email, password, displayName) => {

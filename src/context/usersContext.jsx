@@ -22,7 +22,7 @@ export const UsersProvider = ({ children }) => {
 
             const usersData = []
             querySnapshot.forEach(doc => {
-                usersData.push({ ...doc.data, id: doc.id })
+                usersData.push({ ...doc.data(), id: doc.id })
             })
 
             setUsers(usersData)
