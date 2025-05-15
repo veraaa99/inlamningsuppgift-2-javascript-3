@@ -1,7 +1,7 @@
 "use client"
 
-import { addDoc, collection, onSnapshot, orderBy, serverTimestamp, where } from "firebase/firestore"
-import { createContext, useContext, useEffect, useState } from "react"
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore"
+import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
 import { db } from "@/lib/firebase"
 import { format } from "date-fns"
@@ -15,7 +15,7 @@ export const TasksProvider = ({ children }) => {
     const { isAdmin, authLoaded, user } = useAuth()
 
     useEffect(() => {
-      if(!authLoaded || user) return
+      if(!authLoaded || !user) return
 
       setLoading(true)
 
@@ -37,7 +37,14 @@ export const TasksProvider = ({ children }) => {
       }
 
       const unsub = onSnapshot(q, querySnap => {
-        const updatedTasks = querySnap.map(doc => ({
+        // const updatedTasks = []
+        // querySnap.forEach(doc => {
+        //     updatedTasks.push({
+        //     id: doc.id,
+        //     ...doc.data()
+        //     })
+        // })
+        const updatedTasks = querySnap.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
         }))
@@ -81,10 +88,35 @@ export const TasksProvider = ({ children }) => {
         
     }
 
+    const getTasksByUserForDate = (uid, dateObj) => {
+
+        const iso = useMemo(() => format(dateObj, "yyyy-MM-dd"), [dateObj])
+        return useMemo(() => {
+            return tasks.filter(task => task.ownerId === uid && task.date === iso)
+            .sort((a, b) => a.order - b.order)
+        }, [tasks, uid, iso])
+    }
+
+    const completeTask = async (taskId) => {
+        setLoading(true)
+        try {
+            const taskRef = doc(db, "tasks", taskId)
+            await updateDoc(taskRef, {
+                completed: true
+            })
+        } catch (error) {
+            console.error("Fel vid uppdatering v uppgift: ", error)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const values = {
         addTask,
         loading,
-        tasks
+        tasks,
+        getTasksByUserForDate,
+        completeTask
     }
 
     return (

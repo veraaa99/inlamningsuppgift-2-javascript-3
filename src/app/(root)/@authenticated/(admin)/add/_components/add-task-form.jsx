@@ -100,6 +100,7 @@ export const AddTaskForm = () => {
     const reoccuringType = form.watch("reoccuring")
 
     async function onSubmit(values) {
+   
         const base = {
             title: values.title,
             ownerId: values.ownerId
@@ -113,13 +114,13 @@ export const AddTaskForm = () => {
           }
           if(values.reoccuring === "multiple") {
             await Promise.all(
-              values.dateMultiple(d => addTask({ ...base, date: d }))
+              values.dateMultiple.map(d => addTask({ ...base, date: d }))
             )
           }
           if(values.reoccuring === "range") {
             const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
             await Promise.all(
-              days.dateMultiple(d => addTask({ ...base, date: d }))
+              days.map(d => addTask({ ...base, date: d }))
             )
           }
 
