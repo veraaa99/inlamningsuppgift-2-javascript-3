@@ -1,6 +1,6 @@
 "use client"
 
-import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where } from "firebase/firestore"
+import { addDoc, collection, doc, onSnapshot, orderBy, query, serverTimestamp, updateDoc, where, writeBatch } from "firebase/firestore"
 import { createContext, useContext, useEffect, useMemo, useState } from "react"
 import { useAuth } from "./authContext"
 import { db } from "@/lib/firebase"
@@ -88,6 +88,29 @@ export const TasksProvider = ({ children }) => {
         
     }
 
+    const saveReorder = async (orderedTasks, moved) => {
+        setLoading(true)
+
+        const prevTasks = tasks
+
+        setTasks(orderedTasks)
+
+        const batch = writeBatch(db)
+
+        moved.forEach(({ id, newOrder }) => {
+            batch.update(doc(db, "tasks", id), { order: newOrder })
+        })
+
+        try {
+            await batch.commit()
+        } catch (error) {
+            console.error("Batch error", error)
+            setTasks(prevTasks)
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const getTasksByUserForDate = (uid, dateObj) => {
 
         const iso = useMemo(() => format(dateObj, "yyyy-MM-dd"), [dateObj])
@@ -116,7 +139,8 @@ export const TasksProvider = ({ children }) => {
         loading,
         tasks,
         getTasksByUserForDate,
-        completeTask
+        completeTask,
+        saveReorder
     }
 
     return (

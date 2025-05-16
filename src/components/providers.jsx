@@ -2,6 +2,7 @@ import { AuthProvider } from "@/context/authContext"
 import { ThemeProvider } from "./theme-provider"
 import { UsersProvider } from "@/context/usersContext"
 import { TasksProvider } from "@/context/tasksContext"
+import { ConfettiProvider } from "@/context/confettiContext"
 
 function Providers({ children }) {
   return (
@@ -14,7 +15,9 @@ function Providers({ children }) {
           enableSystem
           disableTransitionOnChange
           >
+            <ConfettiProvider>
               {children}
+            </ConfettiProvider>
           </ThemeProvider>
         </TasksProvider>
       </UsersProvider>
