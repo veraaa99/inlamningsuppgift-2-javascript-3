@@ -22,7 +22,7 @@ function HomePage() {
   return (
     <>
       <Header />
-      <div className="mt-10">
+      <div className="mt-10 pb-20">
         <TaskColumn date={selectedDate} user={user}/>
       </div>
     </>
