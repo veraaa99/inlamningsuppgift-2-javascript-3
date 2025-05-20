@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils"
 import { Progress } from "../ui/progress"
 import { TaskSettingsDialog } from "./task-settings-dialog"
 
-export const TaskProgress = ({ total = 0, completed= 0, className, user}) => {
+export const TaskProgress = ({ total = 0, completed= 0, className, user, accentColor }) => {
 
     const progress = (completed / total) * 100
 
@@ -16,7 +16,7 @@ export const TaskProgress = ({ total = 0, completed= 0, className, user}) => {
             <span>{completed} / {total}</span>
             <span>{isNaN(progress.toFixed(0)) ? 0 : progress.toFixed(0)}%</span>
         </div>
-        <Progress value={progress} className="h-4"/>
+        <Progress accentColor={accentColor} value={progress} className="h-4"/>
     </div>
   )
 }
