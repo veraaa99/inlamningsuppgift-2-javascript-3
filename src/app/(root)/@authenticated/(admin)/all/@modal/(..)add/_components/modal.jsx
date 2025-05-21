@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useRouter } from "next/router"
+import { useRouter } from "next/navigation"
 
 export function Modal({ children }) {
   const [open, setOpen] = React.useState(true)
