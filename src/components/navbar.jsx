@@ -23,8 +23,8 @@ export const Navbar = () => {
     <nav className="flex items-center justify-between pb-10">
         <div>
             <h1 className="block sm:hidden sr-only">familyplanner</h1>
-            <Link className={cn("text-4xl font-bold hidden sm:block", poppins.className)} href="/"><h1>familyplanner</h1></Link>
-            <Link className={cn("text-4xl font-bold block sm:hidden", poppins.className)} href="/">fp</Link>
+            <Link className={cn("text-4xl font-bold hidden sm:block", poppins.className)} href="/"><h1>Workhandler</h1></Link>
+            <Link className={cn("text-4xl font-bold block sm:hidden", poppins.className)} href="/">W</Link>
         </div>
         <div className="flex items-center gap-2">
             <Button asChild variant="outline" size="lg">
@@ -32,7 +32,7 @@ export const Navbar = () => {
                     ? `/?date=${date}` 
                     : "/"
                 }`
-                    }>Min dag</Link>
+                    }>My work day</Link>
             </Button>
             {
                 isAdmin() && (
@@ -42,10 +42,10 @@ export const Navbar = () => {
                                 date
                                     ? `/all/?date=${date}`
                                     : "/all"
-                            }`}>Alla</Link>
+                            }`}>All</Link>
                         </Button>
                         <Button asChild variant="outline" size="lg" className="hidden md:flex">
-                            <Link href="/add">Lägg till uppgift</Link>
+                            <Link href="/add">Add new work task</Link>
                         </Button>
                     </>
                 )

@@ -5,7 +5,7 @@ import { useAuth } from "@/context/authContext";
 import { db, storage } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Loader2Icon } from "lucide-react";
+import { Loader2Icon, LoaderIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -67,7 +67,7 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
 
     } catch (error) {
       console.log(error)
-      console.error("Fel vid uppladdning - försök igen.")
+      console.error("An error occurred when uploading image. Please try again")
     } finally {
       setLoading(false)
     }
@@ -87,7 +87,7 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
             {
               loading && (
                 <div className="absolute flex items-center justify-center inset-0 bg-black/40 pointer-events-auto">
-                  <Loader2Icon className="size-20 animate-spin" />
+                  <LoaderIcon className="size-20 animate-spin" />
                 </div>
               )
             }
@@ -98,7 +98,7 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
               {
                 file && !imageUploaded && (
                   <Button className="mt-4" disabled={loading} onClick={handleUpload}>
-                    { loading ? "Laddar upp" : "Spara" }
+                    { loading ? "Uploading" : "Save" }
                   </Button>
                 )
               }

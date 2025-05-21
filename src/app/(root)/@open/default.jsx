@@ -10,7 +10,7 @@ function AuthPage() {
   return (
     <div>
       <h2 className="text-center max-w-2xl text-4xl mx-auto my-20">
-          Välkommen till <span className={poppins.className}>familyplanner</span>. Logga in för att fortsätta till sidan
+          <span className={poppins.className}>Workhandler</span>. Please login to continue to the site
       </h2>
           <AuthFormView />
     </div>

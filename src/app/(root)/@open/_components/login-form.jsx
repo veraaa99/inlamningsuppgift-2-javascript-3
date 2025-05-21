@@ -42,7 +42,7 @@ export const LoginForm = ({ changeForm, form }) => {
 
   return (
     <>
-        <h2 className="text-center font-semibold text-2xl mb-5">Logga in</h2>
+        <h2 className="text-center font-semibold text-2xl mb-5">Login</h2>
         { errorMessage && <p className="text-red-500 text-center">{ errorMessage }</p> }
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -66,17 +66,18 @@ export const LoginForm = ({ changeForm, form }) => {
                 name="password"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Lösenord</FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <FormControl>
                         <Input type="password" className="not-dark:border-gray-300" {...field} />
                     </FormControl>
                     <FormMessage />
+                    <p className="text-sm">Forgot your password? <span className="underline cursor-pointer">Send reset password link</span></p>
                     </FormItem>
                 )}
                 />
 
-                <p>Har du inget konto? <span onClick={() => changeForm("register")} className="underline cursor-pointer">Registrera dig här</span></p>
-                <Button disabled={loading} className="w-full sm:w-auto" type="submit">Logga in</Button>
+                <p>Don't have an account? <span onClick={() => changeForm("register")} className="underline cursor-pointer">Register here</span></p>
+                <Button disabled={loading} className="w-full sm:w-auto" type="submit">Login</Button>
             </form>
         </Form>
     </>

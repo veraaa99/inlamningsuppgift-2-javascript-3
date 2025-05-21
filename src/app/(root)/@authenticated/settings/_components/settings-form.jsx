@@ -12,20 +12,20 @@ export const SettingsForm = ({ user, isOwnUser }) => {
                 {
                     isOwnUser && (
                         <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                            <p className="font-semibold text-lg">Tema:</p>
+                            <p className="font-semibold text-lg">Theme:</p>
                             <ModeToggle />
                         </div>
                     )
                 }
                 <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                    <p className="font-semibold text-lg">Kortfärg:</p>
+                    <p className="font-semibold text-lg">Card color:</p>
                     <ColorPicker user={user} />
                 </div>
 
                 <UserInfoForm user={user}/>
 
                 <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                    <p className="font-semibold text-lg">Profilbild:</p>
+                    <p className="font-semibold text-lg">Profile pic:</p>
                     <ProfileImageUploader user={user} isOwnUser={isOwnUser}/>
                 </div>
 

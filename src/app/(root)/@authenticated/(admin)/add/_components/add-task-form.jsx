@@ -132,7 +132,7 @@ export const AddTaskForm = ({ isModal }) => {
 
         } catch (error) {
             console.error(error)
-            setErrorMessage("Någonting gick fel. Försök igen.")
+            setErrorMessage("Something went wrong, please try again.")
             setSubmitted(false)
         }
     }
@@ -145,7 +145,7 @@ export const AddTaskForm = ({ isModal }) => {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Uppgift</FormLabel>
+              <FormLabel>Work task</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -158,7 +158,7 @@ export const AddTaskForm = ({ isModal }) => {
           name="ownerId"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Tilldelad till</FormLabel>
+              <FormLabel>Assign to</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -174,7 +174,7 @@ export const AddTaskForm = ({ isModal }) => {
                         ? users.find(
                             (user) => user.uid === field.value
                           )?.displayName
-                        : "Välj användare"}
+                        : "Select a user"}
                       <ChevronsUpDown className="opacity-50" />
                     </Button>
                   </FormControl>
@@ -182,11 +182,11 @@ export const AddTaskForm = ({ isModal }) => {
                 <PopoverContent className="w-52 p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Sök användare..."
+                      placeholder="Search user..."
                       className="h-9"
                     />
                     <CommandList>
-                      <CommandEmpty>Inga användare hittades.</CommandEmpty>
+                      <CommandEmpty>No users found.</CommandEmpty>
                       <CommandGroup>
                         {users.map((user) => (
                           <CommandItem
@@ -303,7 +303,7 @@ export const AddTaskForm = ({ isModal }) => {
         }
 
         { errorMessage && <p className="text-red-500 text-sm">{ errorMessage }</p>}
-        <Button disabled={ loading || submitted } type="submit">{ loading ? "Skapar..." : "Skapa uppgift" }</Button>
+        <Button disabled={ loading || submitted } type="submit">{ loading ? "Creating work task..." : "Create work task" }</Button>
       </form>
     </Form>
   )

@@ -42,7 +42,7 @@ export function Modal({ children }) {
     return (
       <Dialog open={open} onOpenChange={handleOpenChange}>
         <DialogHeader>
-            <DialogTitle>Lägg till en uppgift</DialogTitle>
+            <DialogTitle>Add work task</DialogTitle>
         </DialogHeader>
         <DialogContent className="sm:max-w-[425px]">
           { children }
@@ -56,7 +56,7 @@ export function Modal({ children }) {
      
       <DrawerContent>
         <DrawerHeader className="text-center text-xl">
-          <DrawerTitle>Lägg till en uppgift</DrawerTitle>
+          <DrawerTitle>Add work task</DrawerTitle>
         </DrawerHeader>
         <div className="p-4 overflow-y-auto h-[80svh]">
             { children }

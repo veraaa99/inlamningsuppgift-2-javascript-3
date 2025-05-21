@@ -1,7 +1,7 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase"
-import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
 import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
@@ -18,7 +18,7 @@ export const AuthProvider = ({ children }) => {
     const router = useRouter()
 
     useEffect(() => {
-      onAuthStateChanged(auth, async(firebaseUser) => {
+      const unsub = onAuthStateChanged(auth, async(firebaseUser) => {
         if(!firebaseUser) {
             setUser(null)
             setAuthLoaded(true)
@@ -26,6 +26,12 @@ export const AuthProvider = ({ children }) => {
         }
         
         const docRef = doc(db, "users", firebaseUser.uid)
+
+        if(firebaseUser?.emailVerified) {
+            await updateDoc(docRef, {
+                verified: firebaseUser.emailVerified
+            })
+        }
 
         // const docSnap = await getDoc(docRef)
         // if(docSnap.exists()) {
@@ -57,7 +63,7 @@ export const AuthProvider = ({ children }) => {
 
       })
 
-    //   return () => unsub()
+      return () => unsub()
     }, [])
     
     const register = async (email, password, displayName) => {
@@ -84,6 +90,8 @@ export const AuthProvider = ({ children }) => {
                 verified: false,
                 color: "#9dedcc"
             })
+
+            await verifyEmail()
             
         } catch (err) {
             console.log("Error registering the user: ", err)
@@ -119,44 +127,67 @@ export const AuthProvider = ({ children }) => {
 
     const updateUser = async(user, newUserData) => {
         setLoading(true)
-        const toastId = toast.loading("Laddar...")
+        const toastId = toast.loading("Loading...")
         try {
             const useRef = doc(db, "users", user.uid)
             await updateDoc(useRef, newUserData)
             setUser((prevUser) => ({ ...prevUser, ...newUserData }))
-            toast.success("Profil uppdaterad", { id: toastId})
+            toast.success("Profile updated", { id: toastId})
             
         } catch (error) {
-            toast.error("Någonting gick fel. Försök igen", { id: toastId })
+            toast.error("Something went wrong. Please try again", { id: toastId })
             console.error("Error updating the user: ", error)
         } finally {
             setLoading(false)
         }
     }
 
-    const changePassword = async(currentPassword, newPassword) => {
-        setLoading(true)
-        const toastId = toast.loading("Laddar...")
+    const verifyEmail = async () => {
+        const toastId = toast.loading("Sending verification link...")
         const user = auth.currentUser
 
         if(!user) {
-            console.error("Ingen användare är inloggad")
-            toast.error("Ingen användare är inloggad", { id: toastId })
+            console.error("No user is signed in")
+            toast.error("Something went wrong. Please try again", { id: toastId })
+            return
+        }
+
+        try {
+            await sendEmailVerification(user, {
+                url: `${window.location.origin}/`,
+                handleCodeInApp: false
+            })
+            toast.success("Verification link sent. Check your email to finish your registration", { id: toastId })
+            
+        } catch (error) {
+            console.error("Error sending email verification: ", error)
+            toast.error("Error sending email verification: ", error)
+        }
+    }
+
+    const changePassword = async(currentPassword, newPassword) => {
+        setLoading(true)
+        const toastId = toast.loading("Loading...")
+        const user = auth.currentUser
+
+        if(!user) {
+            console.error("No user is signed in")
+            toast.error("No user is signed in", { id: toastId })
             return
         }
 
         try {
             const userCredential = await reauthenticateWithCredential(user, EmailAuthProvider.credential(user.email, currentPassword))
             await updatePassword(userCredential.user, newPassword)
-            toast.success("Lösenordet har uppdaterats!", { id: toastId })
+            toast.success("Password succesfully updated!", { id: toastId })
         } catch (error) {
             console.error("Error reauthenticating user: ", error)
              if(error.code === "auth/invalid-credential") {
-                toast.error("Fel lösenord", { id: toastId })
+                toast.error("Wrong password", { id: toastId })
             } else if (error.code === "auth/weak-password") {
-                toast.error("Lösenordet är för svagt", { id: toastId })
+                toast.error("Password is too weak", { id: toastId })
             } else {
-                toast.error("Någonting gick fel, försök igen", { id: toastId })
+                toast.error("Something went wrong. Please try again", { id: toastId })
             }
             throw error
         } finally {
@@ -174,7 +205,8 @@ export const AuthProvider = ({ children }) => {
         login,
         isAdmin,
         updateUser,
-        changePassword
+        changePassword,
+        verifyEmail
     }
 
     return (

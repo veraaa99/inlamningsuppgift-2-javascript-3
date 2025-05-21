@@ -17,25 +17,6 @@ import Link from "next/link"
 import { PlusIcon } from "lucide-react"
 import { format } from "date-fns"
 
-// const TASKS = [
-//     {
-//         id: 1,
-//         title: "task 1",
-//     },
-//     {
-//         id: 2,
-//         title: "task 2",
-//     },
-//     {
-//         id: 3,
-//         title: "task 3",
-//     },
-//     {
-//         id: 4,
-//         title: "task 4",
-//     }
-// ]
-
 export const TaskColumn = ({ user, date, className }) => {
 
     // const [tasks, setTasks] = useState([])
@@ -161,7 +142,7 @@ export const TaskColumn = ({ user, date, className }) => {
               className="border-4 border-primary rounded-full p-2 size-12 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
               style={{ borderColor: accentColorIntense, color: textColor, "--track": accentColor}}
               >
-                <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Lägg till uppgift">
+                <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Add new work task">
                   <PlusIcon className="size-5"/>
                 </Link>
               </Button>

@@ -15,11 +15,11 @@ export const DatePicker = ({ date, onDateChange }) => {
             <Button variant="outline">
                 {
                     isToday(date)
-                    ? "Idag"
+                    ? "Today"
                     : isTomorrow(date)
-                        ? "Imorgon"
+                        ? "Tomorrow"
                         : isYesterday(date)
-                            ? "Igår"
+                            ? "Yesterday"
                             : format(date, "PPP", { locale: sv })
                 }
             </Button>

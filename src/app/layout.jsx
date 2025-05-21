@@ -14,10 +14,10 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "familyplanner",
-    template: "%s | familyplanner"
+    default: "workhandler",
+    template: "%s | workhandler"
   },
-  description: "Planera och organisera din familjs dagar tillsammans med familyplanner :D",
+  description: "Manage your work tasks and coworkers together with Workhandler!",
 };
 
 export default function RootLayout({ children }) {

@@ -33,13 +33,13 @@ export const AvatarDropdown = () => {
                     <>
                         <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer md:hidden">
                             <Link href="/all" className="flex items-center gap-2 text-xl md:text-base">
-                                Alla
+                                All
                             </Link>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer md:hidden">
                             <Link href="/add" className="flex items-center gap-2 text-xl md:text-base">
-                                Lägg till uppgift
+                                Add new work task
                             </Link>
                         </DropdownMenuItem>
 
@@ -51,13 +51,13 @@ export const AvatarDropdown = () => {
             <DropdownMenuItem asChild className="not-dark:hover:bg-gray-200 cursor-pointer">
                 <Link href="/settings" className="flex items-center gap-2 text-xl md:text-base">
                     <SettingsIcon className="size-5 md:size-4"/>
-                    Inställningar
+                    Settings
                 </Link>
             </DropdownMenuItem>
 
             <DropdownMenuItem onClick={logout} className="not-dark:hover:bg-gray-200 cursor-pointer text-xl md:text-base">
                     <LogOutIcon className="size-5 md:size-4"/>
-                    Logga ut
+                    Logout
             </DropdownMenuItem>
 
         </DropdownMenuContent>

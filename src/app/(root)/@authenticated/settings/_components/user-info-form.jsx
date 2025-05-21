@@ -18,10 +18,10 @@ import { useAuth } from "@/context/authContext"
 
 const formSchema = z.object({
     displayName: z.string()
-        .nonempty({ message: "Ange ett användarnamn" })
-        .min(3, { message: "Användarnamnet måste vara minst 3 tecken långt" })
-        .max(50, { messsage: "Användarnamnet får inte vara längre än 50 tecken" }),
-    email: z.string().email({ message: "Ange en giltig epostadress" })
+        .nonempty({ message: "Please enter a username" })
+        .min(3, { message: "Username must be at least 3 characters long" })
+        .max(50, { messsage: "Username cannot be longer than 50 characters" }),
+    email: z.string().email({ message: "Please enter a valid email address" })
   })
 
 export const UserInfoForm = ({ user }) => {
@@ -66,7 +66,7 @@ export const UserInfoForm = ({ user }) => {
           name="displayName"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Användarnamn</FormLabel>
+              <FormLabel>Username</FormLabel>
               <FormControl>
                 <Input {...field} />
               </FormControl>
@@ -75,7 +75,7 @@ export const UserInfoForm = ({ user }) => {
           )}
         />
 
-        <Button disabled={loading} type="submit" className="self-end">{ loading ? "Laddar..." : "Ändra"}</Button>
+        <Button disabled={loading} type="submit" className="self-end">{ loading ? "Loading..." : "Change"}</Button>
       </form>
     </Form>
   )

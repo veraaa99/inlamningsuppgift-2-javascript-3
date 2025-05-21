@@ -24,7 +24,7 @@ try {
         })
     })
 } catch (err) {
-    console.warn("IndexedDB cache avaktiverad: ", err.code)
+    console.warn("IndexedDB cache inactivated: ", err.code)
     db = getFirestore(app)
 }
 

@@ -42,7 +42,7 @@ export function TaskSettingsDialog({ user }) {
 
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Inställningar</DialogTitle>
+            <DialogTitle>Settings</DialogTitle>
           </DialogHeader>
           <SettingsForm user={user}/>
         </DialogContent>
@@ -60,7 +60,7 @@ export function TaskSettingsDialog({ user }) {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Inställningar</DrawerTitle>
+          <DrawerTitle>Settings</DrawerTitle>
         </DrawerHeader>
             <div className="p-4 h-[80svh] overflow-y-auto">
                  <SettingsForm user={user}/>

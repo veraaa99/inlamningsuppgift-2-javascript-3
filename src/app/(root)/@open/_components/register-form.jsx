@@ -21,15 +21,15 @@ import { getErrorMessage } from "@/lib/getFirebaseError"
 
 export const registerFormSchema = z.object({
     displayName: z.string()
-    .nonempty({ message: "Ange ett användarnamn" })
-    .min(3, { message: "Användarnamnet måste vara minst 3 tecken långt" })
-    .max(50, { messsage: "Användarnamnet får inte vara längre än 50 tecken" }),
-    email: z.string().email({ message: "Ange en giltig epostadress" }),
-    password: z.string().nonempty({ message: "Skriv in ett lösenord" })
-    .min(6, {message: "Lösenorden måste vara minst 6 tecken långt"}),
-    confirmPassword: z.string().nonempty({ message: "Bekräfta lösenordet" })
+    .nonempty({ message: "Please enter a username" })
+    .min(3, { message: "Username must be at least 3 characters long" })
+    .max(50, { messsage: "Username cannot be longer than 50 characters" }),
+    email: z.string().email({ message: "Please enter a valid email address" }),
+    password: z.string().nonempty({ message: "Enter a password" })
+    .min(6, {message: "Password must be at least 6 characters long"}),
+    confirmPassword: z.string().nonempty({ message: "Confirm password" })
 }).refine(data => data.password === data.confirmPassword, {
-    message: "Lösenorden matchar inte",
+    message: "Passwords do not match",
     path: ["confirmPassword"]
 })
 
@@ -52,7 +52,7 @@ export const RegisterForm = ({ changeForm, form }) => {
 
   return (
     <>
-        <h2 className="text-center font-semibold text-2xl mb-5">Registera ett nytt konto</h2>
+        <h2 className="text-center font-semibold text-2xl mb-5">Register a new account</h2>
         { errorMessage && <p className="text-red-500 text-center">{ errorMessage }</p> }
         <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -61,11 +61,11 @@ export const RegisterForm = ({ changeForm, form }) => {
                 name="displayName"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Användarnamn</FormLabel>
+                    <FormLabel>Username</FormLabel>
                     <FormControl>
                         <Input className="not-dark:border-gray-300" {...field} />
                     </FormControl>
-                    <FormDescription>Detta kommer vara ditt publika användarnamn på plattformen</FormDescription>
+                    <FormDescription>This will be your public name</FormDescription>
                     <FormMessage />
                     </FormItem>
                 )}
@@ -90,7 +90,7 @@ export const RegisterForm = ({ changeForm, form }) => {
                 name="password"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Lösenord</FormLabel>
+                    <FormLabel>Password</FormLabel>
                     <FormControl>
                         <Input type="password" className="not-dark:border-gray-300" {...field} />
                     </FormControl>
@@ -104,7 +104,7 @@ export const RegisterForm = ({ changeForm, form }) => {
                 name="confirmPassword"
                 render={({ field }) => (
                     <FormItem>
-                    <FormLabel>Bekräfta lösenord</FormLabel>
+                    <FormLabel>Confirm password</FormLabel>
                     <FormControl>
                         <Input type="password" className="not-dark:border-gray-300" {...field} />
                     </FormControl>
@@ -112,8 +112,8 @@ export const RegisterForm = ({ changeForm, form }) => {
                     </FormItem>
                 )}
                 />
-                <p>Har du redan ett konto? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Logga in här</span></p>
-                <Button disabled={loading} className="w-full sm:w-auto" type="submit">Skapa konto</Button>
+                <p>Already have an account? <span onClick={() => changeForm("login")} className="underline cursor-pointer">Login here</span></p>
+                <Button disabled={loading} className="w-full sm:w-auto" type="submit">Create account</Button>
             </form>
         </Form>
     </>
