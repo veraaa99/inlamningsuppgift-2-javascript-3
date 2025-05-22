@@ -3,6 +3,7 @@ import { UserInfoForm } from "./user-info-form"
 import { ProfileImageUploader } from "./profile-image-uploader"
 import { ChangePaswordForm } from "./change-password-form"
 import { ColorPicker } from "./color-picker"
+import { UserRolesManager } from "./user-roles-manager"
 
 export const SettingsForm = ({ user, isOwnUser }) => {
   return (
@@ -34,8 +35,10 @@ export const SettingsForm = ({ user, isOwnUser }) => {
             {
                 isOwnUser && <ChangePaswordForm className="bg-green-800 w-full"/>
             }
-
         </div>
+        {
+            isOwnUser && <UserRolesManager />
+        }
     </>
   )
 }

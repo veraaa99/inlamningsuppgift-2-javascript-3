@@ -1,7 +1,7 @@
 "use client"
 
 import { auth, db } from "@/lib/firebase"
-import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
+import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
 import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
@@ -195,6 +195,21 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const sendPasswordReset = async (email) => {
+        setLoading(true)
+        const toastId = toast.loading("Loading...")
+        try {
+            await sendPasswordResetEmail(auth, email)
+            toast.success("Reset password link has been sent", { id: toastId })
+        } catch (error) {
+            console.error("Error sending reset password email")
+            toast.error("Something went wrong. Please try again", { id: toastId })
+            return "Something went wrong. Please try again"
+        } finally {
+            setLoading(false)
+        }
+    }
+
     const values = {
         user,
         setUser,
@@ -206,7 +221,8 @@ export const AuthProvider = ({ children }) => {
         isAdmin,
         updateUser,
         changePassword,
-        verifyEmail
+        verifyEmail,
+        sendPasswordReset
     }
 
     return (

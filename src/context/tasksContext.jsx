@@ -37,13 +37,6 @@ export const TasksProvider = ({ children }) => {
       }
 
       const unsub = onSnapshot(q, querySnap => {
-        // const updatedTasks = []
-        // querySnap.forEach(doc => {
-        //     updatedTasks.push({
-        //     id: doc.id,
-        //     ...doc.data()
-        //     })
-        // })
         const updatedTasks = querySnap.docs.map(doc => ({
             id: doc.id,
             ...doc.data()

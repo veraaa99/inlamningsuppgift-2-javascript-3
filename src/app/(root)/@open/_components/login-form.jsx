@@ -18,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/authContext"
 import { getErrorMessage } from "@/lib/getFirebaseError"
+import { ResetPasswordDialog } from "./reset-password-dialog"
+import { usePasswordReset } from "@/context/passwordResetContext"
 
 export const loginFormSchema = z.object({
     email: z.string().email({ message: "Ange en giltig epostadress" }),
@@ -28,6 +30,7 @@ export const LoginForm = ({ changeForm, form }) => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const { loading, login } = useAuth()
+  const { setOpen } = usePasswordReset()
 
 
   async function onSubmit(values) {
@@ -71,7 +74,7 @@ export const LoginForm = ({ changeForm, form }) => {
                         <Input type="password" className="not-dark:border-gray-300" {...field} />
                     </FormControl>
                     <FormMessage />
-                    <p className="text-sm">Forgot your password? <span className="underline cursor-pointer">Send reset password link</span></p>
+                    <p className="text-sm">Forgot your password? <span onClick={() => setOpen(true)}className="underline cursor-pointer">Send reset password link</span></p>
                     </FormItem>
                 )}
                 />
