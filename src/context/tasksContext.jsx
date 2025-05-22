@@ -67,7 +67,7 @@ export const TasksProvider = ({ children }) => {
                 date: format(taskData.date, "yyyy-MM-dd"),
                 order: getNextOrder(),
                 completed: false,
-                createdAt: serverTimestamp()
+                createdAt: serverTimestamp(),
             }
 
             await addDoc(collection(db, "tasks"), newTask)

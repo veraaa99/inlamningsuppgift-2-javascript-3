@@ -1,3 +1,6 @@
+// TODO: 
+// Städa upp kod
+// Koppla till rätt databas
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -38,7 +41,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useRouter, useSearchParams } from "next/navigation"
-import { eachDayOfInterval, parse } from "date-fns"
+import { eachDayOfInterval, eachHourOfInterval, eachMinuteOfInterval, getHours, getMinutes, parse, setHours, setMinutes } from "date-fns"
 import { useState } from "react"
 import { useUsers } from "@/context/usersContext"
 import Link from "next/link"
@@ -50,79 +53,113 @@ const base = z.object({
     ownerId: z.string().nonempty({ message: "Du måste välja en användare" }),
 })
 
-const single = base.extend({
-    reoccuring: z.literal("none"),
-    date: z.date()
-})
+// const single = base.extend({
+//     reoccuring: z.literal("none"),
+//     date: z.date()
+// })
 
-const multiple = base.extend({
-    reoccuring: z.literal("multiple"),
-    dateMultiple: z.array(z.date()).min(1, "Välj minst ett datum"),
-})
+// const multiple = base.extend({
+//     reoccuring: z.literal("multiple"),
+//     dateMultiple: z.array(z.date()).min(1, "Välj minst ett datum"),
+// })
 
 const range = base.extend({
-    reoccuring: z.literal("range"),
+    // reoccuring: z.literal("range"),
     dateRange: z.object({
         from: z.date(),
         to: z.date()
     })
 })
 
-const formSchema = z.discriminatedUnion("reoccuring", [
-    single,
-    multiple,
-    range
-])
+// const formSchema = z.discriminatedUnion("reoccuring", [
+//     // single,
+//     // multiple,
+//     range
+// ])
 
 export const AddTaskForm = ({ isModal }) => {
 
     const searchParams = useSearchParams()
     const presetDate = searchParams.get("date")
+    const [timeDeadline, setTimeDeadline] = useState("00:00");
     const presetUserId = searchParams.get("userId")
 
     const { users } = useUsers()
     const { addTask, loading } = useTasks()
     const [submitted, setSubmitted] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
+    const [selected, setSelected] = useState();
+
 
     const router = useRouter()
 
     const form = useForm({
-        resolver: zodResolver(formSchema),
+        // resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
             ownerId: presetUserId ?? "",
-            reoccuring: "none",
-            date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date()
+            // reoccuring: "none",
+            date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
+            timeRange: timeDeadline,
+            deadline: ""
         },
     })
 
-    const reoccuringType = form.watch("reoccuring")
+    // https://daypicker.dev/guides/timepicker
+    const handleTimeChange = (e) => {
+    const time = e.target.value;
+    console.log(time)
+    // if (!selected) {
+    //   setTimeDeadline(time);
+    //   return;
+    // }
+   
+    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
+    const newSelectedDate = setHours(setMinutes(selected, minutes), hours);
+    setTimeDeadline(time);
+    setSelected(newSelectedDate);
+    console.log(timeDeadline)
+
+    form.setValue("timeRange", timeDeadline)
+
+  };
+
+    // const reoccuringType = form.watch("reoccuring")
+    // const reoccuringType = "range"
 
     async function onSubmit(values) {
-   
+
+      const test = new Date().toLocaleDateString( values.dateRange.to )
+      const deadline = (test + ' ' + values.timeRange)
+
         const base = {
             title: values.title,
-            ownerId: values.ownerId
+            ownerId: values.ownerId,
+            timeRange: values.timeRange,
+            deadline: deadline
         }
 
         try {
           setSubmitted(true)
 
-          if(values.reoccuring === "none") {
-            await addTask({ ...base, date: values.date })
-          }
-          if(values.reoccuring === "multiple") {
-            await Promise.all(
-              values.dateMultiple.map(d => addTask({ ...base, date: d }))
-            )
-          }
-          if(values.reoccuring === "range") {
+          // if(values.reoccuring === "none") {
+          //   await addTask({ ...base, dateDeadl: values.date })
+          // }
+          // if(values.reoccuring === "multiple") {
+          //   await Promise.all(
+          //     values.dateMultiple.map(d => addTask({ ...base, date: d }))
+          //   )
+          // }
+          // if(values.reoccuring === "range") {
             const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
+            const time = values.timeRange
+
+            console.log(time)
+
             await Promise.all(
               days.map(d => addTask({ ...base, date: d }))
             )
-          }
+          // }
 
           form.reset()
           if(!isModal)
@@ -219,7 +256,7 @@ export const AddTaskForm = ({ isModal }) => {
             </FormItem>
           )}
         />
-
+{/* 
         <FormField
           control={form.control}
           name="reoccuring"
@@ -241,14 +278,15 @@ export const AddTaskForm = ({ isModal }) => {
               <FormDescription>
                 { reoccuringType === "none" && "Välj hur ofta uppgiften ska upprepas. Väljer du 'ingen' så är det engångsuppgift." }
                 { reoccuringType === "multiple" && "Välj flera dagar som du vill ha uppgiften på." }
-                { reoccuringType === "range" && "Välj ett start- och slutdatum för uppgiften. Uppgiften kommer at upprepas varje dag mellan dessa datum." }
+                Välj ett start- och slutdatum för uppgiften. Uppgiften kommer at upprepas varje dag mellan dessa datum.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> */}
 
-        {
+
+        {/* {
             reoccuringType === "none" && 
             <FormField
                 control={form.control}
@@ -282,25 +320,39 @@ export const AddTaskForm = ({ isModal }) => {
                     </FormItem>
                 )}
             />
-        }
+        } */}
 
-        {
-            reoccuringType === "range" && 
-            <FormField
-                control={form.control}
-                name="dateRange"
-                render={({ field }) => (
-                    <FormItem>
-                        <Calendar
-                        mode="range"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        />
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-        }
+                <FormField
+                    control={form.control}
+                    name="dateRange"
+                    render={({ field }) => (
+                      <FormItem>
+                          <FormLabel>Select date range</FormLabel>
+                            <Calendar
+                            mode="range"
+                            selected={field.value}
+                            onSelect={field.onChange}
+                            />
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+        
+          <FormField
+                    control={form.control}
+                    name="timeRange"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Select deadline:</FormLabel>
+                            <input type="time"
+                             value={field.value} 
+                             onChange={field.onChange}
+                             />
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+        
 
         { errorMessage && <p className="text-red-500 text-sm">{ errorMessage }</p>}
         <Button disabled={ loading || submitted } type="submit">{ loading ? "Creating work task..." : "Create work task" }</Button>
