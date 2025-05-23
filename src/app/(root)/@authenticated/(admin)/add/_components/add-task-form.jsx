@@ -1,5 +1,4 @@
 // TODO: 
-// Städa upp kod
 // Koppla till rätt databas
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"

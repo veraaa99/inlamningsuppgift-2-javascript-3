@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/authContext"
 import { getErrorMessage } from "@/lib/getFirebaseError"
+import { useUsers } from "@/context/usersContext"
 
 export const registerFormSchema = z.object({
     displayName: z.string()
@@ -37,12 +38,20 @@ export const RegisterForm = ({ changeForm, form }) => {
 
   const [errorMessage, setErrorMessage] = useState(null)
   const { register, loading } = useAuth()
+  const { users } = useUsers()
 
   async function onSubmit(values) {
 
     try {
-        const { email, password, displayName } = values
-        await register(email, password, displayName)
+        if( users.length == 0 ) {
+            const { email, password, displayName } = values
+            const role = "admin"
+            await register(email, password, displayName, role)
+        } else {
+            const { email, password, displayName } = values
+            const role = "user"
+            await register(email, password, displayName, role)
+        }
     } catch (err) {
         const errorMessage = getErrorMessage(err.code)
         setErrorMessage(errorMessage)

@@ -2,9 +2,7 @@
 
 import { cn } from "@/lib/utils"
 import { TaskList } from "./task-list"
-import { useEffect, useRef, useState } from "react"
-import { collection, doc, getDocs, updateDoc } from "firebase/firestore"
-import { db } from "@/lib/firebase"
+import { useRef, useState } from "react"
 import { useTasks } from "@/context/tasksContext"
 import { useAuth } from "@/context/authContext"
 import { Switch } from "../ui/switch"
@@ -18,29 +16,6 @@ import { PlusIcon } from "lucide-react"
 import { format } from "date-fns"
 
 export const TaskColumn = ({ user, date, className }) => {
-
-    // const [tasks, setTasks] = useState([])
-
-    // useEffect(() => {
-
-    //     const getTasks = async() => {
-    //         const querySnapshot = await getDocs(collection(db, "tasks"))
-    //         const data = []
-    //         querySnapshot.forEach(doc => {
-    //             data.push({
-    //                 id: doc.id,
-    //                 ...doc.data()
-    //             })
-    //         })
-    //         // const updatedTasks = querySnapshot.map(doc => ({
-    //         // id: doc.id,
-    //         // ...doc.data()
-    //         // }))
-    //         setTasks(data)
-    //     }
-    //     getTasks()
-      
-    // }, [])
 
     const [isReordering, setIsReordering] = useState(false)
     const [localTasks, setLocalTasks] = useState([])
@@ -118,7 +93,7 @@ export const TaskColumn = ({ user, date, className }) => {
         {
           isAdmin && (
             <div className="flex items-center justify-between mb-5" style={{ "--track": accentColorIntense ?? "#99a1af" }}>
-              <span className="font-medium">Sortera</span>
+              <span className="font-medium">Sort</span>
               <Switch 
               checked={isReordering}
               onCheckedChange={handleCheckChange}
@@ -127,7 +102,6 @@ export const TaskColumn = ({ user, date, className }) => {
             </div>
           )
         }
-        {/* Admin switch */}
         <div className="flex-1">
           {
             isReordering

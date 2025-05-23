@@ -2,10 +2,11 @@
 
 import { auth, db } from "@/lib/firebase"
 import { createUserWithEmailAndPassword, EmailAuthProvider, getAuth, onAuthStateChanged, reauthenticateWithCredential, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, updatePassword, updateProfile } from "firebase/auth"
-import { doc, getDoc, setDoc, Timestamp, updateDoc } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, limit, query, setDoc, Timestamp, updateDoc } from "firebase/firestore"
 import { useRouter } from "next/navigation"
 import { createContext, useContext, useEffect, useState } from "react"
 import toast from "react-hot-toast"
+import { useUsers } from "./usersContext"
 
 const AuthContext = createContext()
 
@@ -32,11 +33,6 @@ export const AuthProvider = ({ children }) => {
                 verified: firebaseUser.emailVerified
             })
         }
-
-        // const docSnap = await getDoc(docRef)
-        // if(docSnap.exists()) {
-        //     setUser(docSnap.data())
-        // }
 
         const getUserDocWithRetry = async(retries = 5, delay = 300) => {
             let docSnap = null
@@ -66,7 +62,7 @@ export const AuthProvider = ({ children }) => {
       return () => unsub()
     }, [])
     
-    const register = async (email, password, displayName) => {
+    const register = async (email, password, displayName, role) => {
         setLoading(true)
 
         try {
@@ -77,20 +73,20 @@ export const AuthProvider = ({ children }) => {
                 console.log("no user")
                 return
             }
-            
+
             const docRef = doc(db, "users", res.user.uid)
 
             await setDoc(docRef, {
                 uid: res.user.uid,
                 email: res.user.email,
                 displayName: res.user.displayName,
-                role: "user",
+                role: role,
                 createdAt: Timestamp.now(),
                 photoURL: null,
                 verified: false,
                 color: "#9dedcc"
             })
-
+            
             await verifyEmail()
             
         } catch (err) {

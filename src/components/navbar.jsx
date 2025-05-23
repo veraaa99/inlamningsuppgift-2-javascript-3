@@ -23,7 +23,7 @@ export const Navbar = () => {
     <nav className="flex items-center justify-between pb-10">
         <div>
             <h1 className="block sm:hidden sr-only">familyplanner</h1>
-            <Link className={cn("text-4xl font-bold hidden sm:block", poppins.className)} href="/"><h1>Workhandler</h1></Link>
+            <Link className={cn("text-3xl font-bold hidden sm:block xl:text-4xl", poppins.className)} href="/"><h1>Workhandler</h1></Link>
             <Link className={cn("text-4xl font-bold block sm:hidden", poppins.className)} href="/">W</Link>
         </div>
         <div className="flex items-center gap-2">
