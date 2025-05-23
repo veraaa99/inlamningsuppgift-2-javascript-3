@@ -71,6 +71,7 @@ export const TasksProvider = ({ children }) => {
             }
 
             await addDoc(collection(db, "tasks"), newTask)
+            console.log(newTask)
             
         } catch (error) {
             console.log(error)

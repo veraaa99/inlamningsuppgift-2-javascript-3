@@ -44,134 +44,117 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { eachDayOfInterval, eachHourOfInterval, eachMinuteOfInterval, getHours, getMinutes, parse, setHours, setMinutes } from "date-fns"
 import { useState } from "react"
 import { useUsers } from "@/context/usersContext"
-import Link from "next/link"
 import { Calendar } from "@/components/ui/calendar"
 import { useTasks } from "@/context/tasksContext"
 
 const base = z.object({
-    title: z.string().nonempty({ message: "Titel på uppgift är obligatorisk" }),
-    ownerId: z.string().nonempty({ message: "Du måste välja en användare" }),
+    title: z.string().nonempty({ message: "Please enter a title for your work task" }),
+    ownerId: z.string().nonempty({ message: "Please select a user" }),
+    time: z.string(),
+    deadline: z.string()
 })
 
-// const single = base.extend({
-//     reoccuring: z.literal("none"),
-//     date: z.date()
-// })
+const single = base.extend({
+    reoccuring: z.literal("none"),
+    date: z.date()
+})
 
-// const multiple = base.extend({
-//     reoccuring: z.literal("multiple"),
-//     dateMultiple: z.array(z.date()).min(1, "Välj minst ett datum"),
-// })
+const multiple = base.extend({
+    reoccuring: z.literal("multiple"),
+    dateMultiple: z.array(z.date()).min(1, "Please select at least one date"),
+})
 
 const range = base.extend({
-    // reoccuring: z.literal("range"),
+    reoccuring: z.literal("range"),
     dateRange: z.object({
         from: z.date(),
         to: z.date()
     })
 })
 
-// const formSchema = z.discriminatedUnion("reoccuring", [
-//     // single,
-//     // multiple,
-//     range
-// ])
+const formSchema = z.discriminatedUnion("reoccuring", [
+    single,
+    multiple,
+    range
+])
 
 export const AddTaskForm = ({ isModal }) => {
 
     const searchParams = useSearchParams()
     const presetDate = searchParams.get("date")
-    const [timeDeadline, setTimeDeadline] = useState("00:00");
+    const presetTime = "00:00";
     const presetUserId = searchParams.get("userId")
 
     const { users } = useUsers()
     const { addTask, loading } = useTasks()
     const [submitted, setSubmitted] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
-    const [selected, setSelected] = useState();
-
 
     const router = useRouter()
 
     const form = useForm({
-        // resolver: zodResolver(formSchema),
+        resolver: zodResolver(formSchema),
         defaultValues: {
             title: "",
             ownerId: presetUserId ?? "",
-            // reoccuring: "none",
+            reoccuring: "none",
             date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
-            timeRange: timeDeadline,
+            time: presetTime,
             deadline: ""
         },
     })
 
-    // https://daypicker.dev/guides/timepicker
-    const handleTimeChange = (e) => {
-    const time = e.target.value;
-    console.log(time)
-    // if (!selected) {
-    //   setTimeDeadline(time);
-    //   return;
-    // }
-   
-    const [hours, minutes] = time.split(":").map((str) => parseInt(str, 10));
-    const newSelectedDate = setHours(setMinutes(selected, minutes), hours);
-    setTimeDeadline(time);
-    setSelected(newSelectedDate);
-    console.log(timeDeadline)
-
-    form.setValue("timeRange", timeDeadline)
-
-  };
-
-    // const reoccuringType = form.watch("reoccuring")
-    // const reoccuringType = "range"
+    const reoccuringType = form.watch("reoccuring")
 
     async function onSubmit(values) {
 
-      const test = new Date().toLocaleDateString( values.dateRange.to )
-      const deadline = (test + ' ' + values.timeRange)
+      const base = {
+          title: values.title,
+          ownerId: values.ownerId,
+          time: values.time,
+      }
 
-        const base = {
-            title: values.title,
-            ownerId: values.ownerId,
-            timeRange: values.timeRange,
-            deadline: deadline
+      try {
+        setSubmitted(true)
+
+        if(values.reoccuring === "none") {
+          const test = new Date(values.date)
+          const test2 = test.toLocaleDateString()
+         
+          await addTask({ ...base, date: values.date, deadline: (test2 + ' ' + values.time)})
+        }
+        if(values.reoccuring === "multiple") {
+          const bla = values.dateMultiple[values.dateMultiple.length - 1];
+
+          const test = new Date(bla)
+          const test2 = test.toLocaleDateString()
+
+          await Promise.all(
+            values.dateMultiple.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
+          )
+        }
+        if(values.reoccuring === "range") {
+          const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
+
+          const test = new Date(values.dateRange.to)
+          const test2 = test.toLocaleDateString()
+
+          await Promise.all(
+            days.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
+          )
         }
 
-        try {
-          setSubmitted(true)
+        form.reset()
+        if(!isModal)
+          router.push("/")
+        else
+          router.back()
 
-          // if(values.reoccuring === "none") {
-          //   await addTask({ ...base, dateDeadl: values.date })
-          // }
-          // if(values.reoccuring === "multiple") {
-          //   await Promise.all(
-          //     values.dateMultiple.map(d => addTask({ ...base, date: d }))
-          //   )
-          // }
-          // if(values.reoccuring === "range") {
-            const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
-            const time = values.timeRange
-
-            console.log(time)
-
-            await Promise.all(
-              days.map(d => addTask({ ...base, date: d }))
-            )
-          // }
-
-          form.reset()
-          if(!isModal)
-            router.push("/")
-          else
-            router.back()
-
-        } catch (error) {
-            console.error(error)
-            setErrorMessage("Something went wrong, please try again.")
-            setSubmitted(false)
-        }
+      } catch (error) {
+          console.error(error)
+          setErrorMessage("Something went wrong, please try again.")
+          setSubmitted(false)
+      }
     }
 
   return (
@@ -256,7 +239,7 @@ export const AddTaskForm = ({ isModal }) => {
             </FormItem>
           )}
         />
-{/* 
+
         <FormField
           control={form.control}
           name="reoccuring"
@@ -283,77 +266,77 @@ export const AddTaskForm = ({ isModal }) => {
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        />
 
+        {/* https://daypicker.dev/guides/timepicker */}
+        <FormField
+            control={form.control}
+            name="time"
+            render={({ field }) => (
+                <FormItem>
+                <FormLabel>Select deadline:</FormLabel>
+                  <input type="time"
+                    value={field.value} 
+                    onChange={field.onChange}
+                    />
+                <FormMessage />
+              </FormItem>
+            )}
+        />
 
-        {/* {
-            reoccuringType === "none" && 
-            <FormField
-                control={form.control}
-                name="date"
-                render={({ field }) => (
-                    <FormItem>
-                        <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        />
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
+        {
+          reoccuringType === "none" && 
+          <FormField
+              control={form.control}
+              name="date"
+              render={({ field }) => (
+                  <FormItem>
+                      <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      />
+                  <FormMessage />
+                  </FormItem>
+              )}
+          />
         }
 
         {
-            reoccuringType === "multiple" && 
-            <FormField
-                control={form.control}
-                name="dateMultiple"
-                render={({ field }) => (
-                    <FormItem>
-                        <Calendar
-                        mode="multiple"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        />
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
-        } */}
-
-                <FormField
-                    control={form.control}
-                    name="dateRange"
-                    render={({ field }) => (
-                      <FormItem>
-                          <FormLabel>Select date range</FormLabel>
-                            <Calendar
-                            mode="range"
-                            selected={field.value}
-                            onSelect={field.onChange}
-                            />
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-        
+          reoccuringType === "multiple" && 
           <FormField
-                    control={form.control}
-                    name="timeRange"
-                    render={({ field }) => (
-                        <FormItem>
-                        <FormLabel>Select deadline:</FormLabel>
-                            <input type="time"
-                             value={field.value} 
-                             onChange={field.onChange}
-                             />
-                        <FormMessage />
-                        </FormItem>
-                    )}
-                />
-        
-
+              control={form.control}
+              name="dateMultiple"
+              render={({ field }) => (
+                  <FormItem>
+                      <Calendar
+                      mode="multiple"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      />
+                  <FormMessage />
+                  </FormItem>
+              )}
+          />
+        }
+        {
+          reoccuringType === "range" && 
+          <FormField
+              control={form.control}
+              name="dateRange"
+              render={({ field }) => (
+                <FormItem>
+                      <Calendar
+                      mode="range"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      />
+                  <FormMessage />
+                  </FormItem>
+              )}
+          />
+        }
+          
         { errorMessage && <p className="text-red-500 text-sm">{ errorMessage }</p>}
         <Button disabled={ loading || submitted } type="submit">{ loading ? "Creating work task..." : "Create work task" }</Button>
       </form>
