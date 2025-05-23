@@ -80,82 +80,82 @@ const formSchema = z.discriminatedUnion("reoccuring", [
 
 export const AddTaskForm = ({ isModal }) => {
 
-    const searchParams = useSearchParams()
-    const presetDate = searchParams.get("date")
-    const presetTime = "00:00";
-    const presetUserId = searchParams.get("userId")
+  const searchParams = useSearchParams()
+  const presetDate = searchParams.get("date")
+  const presetTime = "00:00";
+  const presetUserId = searchParams.get("userId")
 
-    const { users } = useUsers()
-    const { addTask, loading } = useTasks()
-    const [submitted, setSubmitted] = useState(false)
-    const [errorMessage, setErrorMessage] = useState(null)
+  const { users } = useUsers()
+  const { addTask, loading } = useTasks()
+  const [submitted, setSubmitted] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(null)
 
-    const router = useRouter()
+  const router = useRouter()
 
-    const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            title: "",
-            ownerId: presetUserId ?? "",
-            reoccuring: "none",
-            date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
-            time: presetTime,
-            deadline: ""
-        },
-    })
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+        title: "",
+        ownerId: presetUserId ?? "",
+        reoccuring: "none",
+        date: presetDate ? parse(presetDate, "yyyy-MM-dd", new Date()) ?? new Date() : new Date(),
+        time: presetTime,
+        deadline: ""
+    },
+  })
 
-    const reoccuringType = form.watch("reoccuring")
+  const reoccuringType = form.watch("reoccuring")
 
-    async function onSubmit(values) {
+  async function onSubmit(values) {
 
-      const base = {
-          title: values.title,
-          ownerId: values.ownerId,
-          time: values.time,
-      }
-
-      try {
-        setSubmitted(true)
-
-        if(values.reoccuring === "none") {
-          const test = new Date(values.date)
-          const test2 = test.toLocaleDateString()
-         
-          await addTask({ ...base, date: values.date, deadline: (test2 + ' ' + values.time)})
-        }
-        if(values.reoccuring === "multiple") {
-          const bla = values.dateMultiple[values.dateMultiple.length - 1];
-
-          const test = new Date(bla)
-          const test2 = test.toLocaleDateString()
-
-          await Promise.all(
-            values.dateMultiple.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
-          )
-        }
-        if(values.reoccuring === "range") {
-          const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
-
-          const test = new Date(values.dateRange.to)
-          const test2 = test.toLocaleDateString()
-
-          await Promise.all(
-            days.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
-          )
-        }
-
-        form.reset()
-        if(!isModal)
-          router.push("/")
-        else
-          router.back()
-
-      } catch (error) {
-          console.error(error)
-          setErrorMessage("Something went wrong, please try again.")
-          setSubmitted(false)
-      }
+    const base = {
+        title: values.title,
+        ownerId: values.ownerId,
+        time: values.time,
     }
+
+    try {
+      setSubmitted(true)
+
+      if(values.reoccuring === "none") {
+        const test = new Date(values.date)
+        const test2 = test.toLocaleDateString()
+        
+        await addTask({ ...base, date: values.date, deadline: (test2 + ' ' + values.time)})
+      }
+      if(values.reoccuring === "multiple") {
+        const bla = values.dateMultiple[values.dateMultiple.length - 1];
+
+        const test = new Date(bla)
+        const test2 = test.toLocaleDateString()
+
+        await Promise.all(
+          values.dateMultiple.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
+        )
+      }
+      if(values.reoccuring === "range") {
+        const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
+
+        const test = new Date(values.dateRange.to)
+        const test2 = test.toLocaleDateString()
+
+        await Promise.all(
+          days.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
+        )
+      }
+
+      form.reset()
+      if(!isModal)
+        router.push("/")
+      else
+        router.back()
+
+    } catch (error) {
+        console.error(error)
+        setErrorMessage("Something went wrong, please try again.")
+        setSubmitted(false)
+    }
+  }
 
   return (
     <Form {...form}>
@@ -245,23 +245,23 @@ export const AddTaskForm = ({ isModal }) => {
           name="reoccuring"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Upprepning</FormLabel>
+              <FormLabel>Frequency</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger className="w-full sm:w-52">
-                    <SelectValue placeholder="Välj upprepning" />
+                    <SelectValue placeholder="Select frequency" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="none">Ingen</SelectItem>
-                  <SelectItem value="multiple">Flera dagar</SelectItem>
-                  <SelectItem value="range">Från - Till</SelectItem>
+                  <SelectItem value="none">Once</SelectItem>
+                  <SelectItem value="multiple">Multiple days</SelectItem>
+                  <SelectItem value="range">From - To</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>
-                { reoccuringType === "none" && "Välj hur ofta uppgiften ska upprepas. Väljer du 'ingen' så är det engångsuppgift." }
-                { reoccuringType === "multiple" && "Välj flera dagar som du vill ha uppgiften på." }
-                Välj ett start- och slutdatum för uppgiften. Uppgiften kommer at upprepas varje dag mellan dessa datum.
+                { reoccuringType === "none" && "Select the frequency of the work task. If you choose 'Once', the task will only be active during one selected date." }
+                { reoccuringType === "multiple" && "Select multiple days for the task to be active" }
+                { reoccuringType === "range" && "Select a start and an end date for the task. The task will be repeated every day between these two dates." }
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -270,70 +270,69 @@ export const AddTaskForm = ({ isModal }) => {
 
         {/* https://daypicker.dev/guides/timepicker */}
         <FormField
-            control={form.control}
-            name="time"
-            render={({ field }) => (
-                <FormItem>
-                <FormLabel>Select deadline:</FormLabel>
-                  <input type="time"
-                    value={field.value} 
-                    onChange={field.onChange}
-                    />
-                <FormMessage />
-              </FormItem>
-            )}
+          control={form.control}
+          name="time"
+          render={({ field }) => (
+              <FormItem>
+              <FormLabel>Select deadline:</FormLabel>
+                <input type="time"
+                  value={field.value} 
+                  onChange={field.onChange}
+                  />
+              <FormMessage />
+            </FormItem>
+          )}
         />
 
         {
           reoccuringType === "none" && 
           <FormField
-              control={form.control}
-              name="date"
-              render={({ field }) => (
-                  <FormItem>
-                      <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      />
-                  <FormMessage />
-                  </FormItem>
-              )}
+            control={form.control}
+            name="date"
+            render={({ field }) => (
+                <FormItem>
+                    <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    />
+                <FormMessage />
+                </FormItem>
+            )}
           />
         }
-
         {
           reoccuringType === "multiple" && 
           <FormField
-              control={form.control}
-              name="dateMultiple"
-              render={({ field }) => (
-                  <FormItem>
-                      <Calendar
-                      mode="multiple"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      />
-                  <FormMessage />
-                  </FormItem>
-              )}
+            control={form.control}
+            name="dateMultiple"
+            render={({ field }) => (
+                <FormItem>
+                    <Calendar
+                    mode="multiple"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    />
+                <FormMessage />
+                </FormItem>
+            )}
           />
         }
         {
           reoccuringType === "range" && 
           <FormField
-              control={form.control}
-              name="dateRange"
-              render={({ field }) => (
-                <FormItem>
-                      <Calendar
-                      mode="range"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      />
-                  <FormMessage />
-                  </FormItem>
-              )}
+            control={form.control}
+            name="dateRange"
+            render={({ field }) => (
+              <FormItem>
+                    <Calendar
+                    mode="range"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    />
+                <FormMessage />
+                </FormItem>
+            )}
           />
         }
           

@@ -51,6 +51,7 @@ export const TaskColumn = ({ user, date, className }) => {
     const { showConfetti } = useConfetti()
 
     const tasks = getTasksByUserForDate(user.uid, date)
+    console.log(tasks)
 
     const notCompleted = tasks.filter(task => !task.completed)
 

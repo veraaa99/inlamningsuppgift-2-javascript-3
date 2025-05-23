@@ -19,6 +19,8 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
         style={{ backgroundColor: accentColor }}
         >
           <span className="text-xl font-medium">{task.title}</span>
+          <p className="text-sm font-bold mt-3">Deadline: </p>
+          <p className="text-sm font-medium">{task.deadline}</p>
       </motion.div>
     </Delay>
   )
