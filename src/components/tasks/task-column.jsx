@@ -26,7 +26,6 @@ export const TaskColumn = ({ user, date, className }) => {
     const { showConfetti } = useConfetti()
 
     const tasks = getTasksByUserForDate(user.uid, date)
-    console.log(tasks)
 
     const notCompleted = tasks.filter(task => !task.completed)
 
@@ -41,7 +40,7 @@ export const TaskColumn = ({ user, date, className }) => {
 
     const startReorder = () => {
       const deep = tasks
-        .filter(t => !t.completed)
+        // .filter(t => !t.completed)
         .map(t => ({ ...t }))
 
         movedTasks.current = []
@@ -106,7 +105,9 @@ export const TaskColumn = ({ user, date, className }) => {
           {
             isReordering
             ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
-            : <TaskList tasks={notCompleted} accentColor={accentColor} handleComplete={handleComplete}/>
+            : <TaskList tasks={tasks} accentColor={accentColor} handleComplete={handleComplete}/>
+            // <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
+            // <TaskList tasks={notCompleted} accentColor={accentColor} handleComplete={handleComplete}/>
           }
         </div>
         {

@@ -5,7 +5,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
@@ -41,10 +40,11 @@ import {
 } from "@/components/ui/popover"
 import { useRouter, useSearchParams } from "next/navigation"
 import { eachDayOfInterval, eachHourOfInterval, eachMinuteOfInterval, getHours, getMinutes, parse, setHours, setMinutes } from "date-fns"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useUsers } from "@/context/usersContext"
 import { Calendar } from "@/components/ui/calendar"
 import { useTasks } from "@/context/tasksContext"
+import { Button } from "@/components/ui/button"
 
 const base = z.object({
     title: z.string().nonempty({ message: "Please enter a title for your work task" }),
@@ -77,19 +77,25 @@ const formSchema = z.discriminatedUnion("reoccuring", [
     range
 ])
 
-export const AddTaskForm = ({ isModal }) => {
 
+export const AddTaskForm = ({ isModal }) => {
+  
   const searchParams = useSearchParams()
   const presetDate = searchParams.get("date")
   const presetTime = "00:00";
   const presetUserId = searchParams.get("userId")
-
+  
   const { users } = useUsers()
   const { addTask, loading } = useTasks()
   const [submitted, setSubmitted] = useState(false)
   const [errorMessage, setErrorMessage] = useState(null)
-
+  
   const router = useRouter()
+  
+  useEffect(() => {
+  console.log(loading)
+  console.log(submitted)
+}, [])
 
   const form = useForm({
     resolver: zodResolver(formSchema),

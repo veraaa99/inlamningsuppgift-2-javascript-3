@@ -20,11 +20,15 @@ export const AuthProvider = ({ children }) => {
 
     useEffect(() => {
       const unsub = onAuthStateChanged(auth, async(firebaseUser) => {
+        console.log(firebaseUser)
         if(!firebaseUser) {
+            console.log("bla")
             setUser(null)
             setAuthLoaded(true)
             return
         }
+
+        console.log("bla2")
         
         const docRef = doc(db, "users", firebaseUser.uid)
 

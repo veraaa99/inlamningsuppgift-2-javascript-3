@@ -15,9 +15,11 @@ export const TasksProvider = ({ children }) => {
     const { isAdmin, authLoaded, user } = useAuth()
 
     useEffect(() => {
+        console.log(loading)
       if(!authLoaded || !user) return
 
       setLoading(true)
+      console.log(user)
 
       let q
 
@@ -27,6 +29,7 @@ export const TasksProvider = ({ children }) => {
             orderBy("date"), 
             orderBy("order")
         )
+        console.log(loading)
       } else {
         q = query(
             collection(db, "tasks"),
@@ -43,11 +46,12 @@ export const TasksProvider = ({ children }) => {
         }))
         setTasks(updatedTasks)
         setLoading(false)
-      })
-
+    })
+    
+    console.log(loading)
       return () => unsub()
 
-    }, [isAdmin])
+    }, [isAdmin, user])
     
     const getNextOrder = () => {
         if(!tasks.length) return 1000

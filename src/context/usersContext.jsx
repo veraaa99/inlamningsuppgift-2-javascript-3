@@ -17,6 +17,7 @@ export const UsersProvider = ({ children }) => {
 
     useEffect(() => {
         if(!isAdmin()) return
+        console.log("hej")
 
         const q = query(collection(db, "users"))
         const unsub = onSnapshot(q, querySnapshot => {
@@ -27,7 +28,9 @@ export const UsersProvider = ({ children }) => {
             })
 
             setUsers(usersData)
+            console.log(usersData)
         })
+        console.log(users)
 
         return () => unsub()
       

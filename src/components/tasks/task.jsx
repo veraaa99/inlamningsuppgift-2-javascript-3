@@ -1,4 +1,5 @@
 "use client"
+import { Circle, CircleCheck } from "lucide-react"
 import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
@@ -18,7 +19,14 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
         onClick={() => handleComplete(task)}
         style={{ backgroundColor: accentColor }}
         >
-          <span className="text-xl font-medium">{task.title}</span>
+          <div className="flex justify-between">
+            <span className="text-xl font-medium">{task.title}</span>
+            {
+              task.completed 
+              ? <CircleCheck className="self-center"></CircleCheck>
+              : <Circle className="self-center"></Circle>
+            }
+          </div>
           <p className="text-sm font-bold mt-3">Deadline: </p>
           <p className="text-sm font-medium">{task.deadline}</p>
       </motion.div>

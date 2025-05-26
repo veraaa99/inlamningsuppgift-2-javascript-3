@@ -16,6 +16,7 @@ export default HomePage
 // Connecta till rätt databas och se till att allt funkar
 // Se till att hela projektet är på engelska
 // Ändra styling så den ser lite annorlunda ut än Joakims
+// Göra en bock när uppgiften är avklarad?
 // Ta bort andra ev funktioner som inte är krav för uppgiften
 
 
@@ -25,9 +26,9 @@ export default HomePage
 // Next.js: Projektet ska byggas i Next.js med App Router. - OK
 
 // Autentisering: Det ska gå att autensiera en användare med en färdig Auth-tjänst (t.ex. firebase, clerk etc) 
-// och man ska vara tvungen att logga in för att komma åt sidan. - 
+// och man ska vara tvungen att logga in för att komma åt sidan. - OK
 
-// Rollbaserad åtkost: Bara en administratör ska kunna lägga till uppgifter till användare. - 
+// Rollbaserad åtkost: Bara en administratör ska kunna lägga till uppgifter till användare. - OK
 
 // Uppgifter: Användare av systemet kan se och klarmarkera sina egna arbetsuppgifter.
 
