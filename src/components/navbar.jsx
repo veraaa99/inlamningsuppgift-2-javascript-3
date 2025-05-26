@@ -32,7 +32,7 @@ export const Navbar = () => {
                     ? `/?date=${date}` 
                     : "/"
                 }`
-                    }>My work day</Link>
+                    }>My schedule</Link>
             </Button>
             {
                 isAdmin() && (
@@ -45,7 +45,7 @@ export const Navbar = () => {
                             }`}>All</Link>
                         </Button>
                         <Button asChild variant="outline" size="lg" className="hidden md:flex">
-                            <Link href="/add">Add new work task</Link>
+                            <Link href="/add">Add new task</Link>
                         </Button>
                     </>
                 )
