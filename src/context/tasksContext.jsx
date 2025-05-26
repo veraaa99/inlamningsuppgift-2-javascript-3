@@ -15,11 +15,9 @@ export const TasksProvider = ({ children }) => {
     const { isAdmin, authLoaded, user } = useAuth()
 
     useEffect(() => {
-        console.log(loading)
       if(!authLoaded || !user) return
 
       setLoading(true)
-      console.log(user)
 
       let q
 
@@ -29,7 +27,6 @@ export const TasksProvider = ({ children }) => {
             orderBy("date"), 
             orderBy("order")
         )
-        console.log(loading)
       } else {
         q = query(
             collection(db, "tasks"),
@@ -48,7 +45,6 @@ export const TasksProvider = ({ children }) => {
         setLoading(false)
     })
     
-    console.log(loading)
       return () => unsub()
 
     }, [isAdmin, user])
@@ -56,7 +52,6 @@ export const TasksProvider = ({ children }) => {
     const getNextOrder = () => {
         if(!tasks.length) return 1000
         return Math.max(...tasks.map(task => task.order ?? 0), 0) + 1000
-
     }
 
     const addTask = async (taskData) => {
@@ -75,10 +70,9 @@ export const TasksProvider = ({ children }) => {
             }
 
             await addDoc(collection(db, "tasks"), newTask)
-            console.log(newTask)
             
         } catch (error) {
-            console.log(error)
+            console.error("An error occurrred. Please try again", error)
             throw error
         } finally {
             setLoading(false)
@@ -88,6 +82,8 @@ export const TasksProvider = ({ children }) => {
 
     const saveReorder = async (orderedTasks, moved) => {
         setLoading(true)
+        console.log(moved)
+        console.log(orderedTasks)
 
         const prevTasks = tasks
 
@@ -110,7 +106,6 @@ export const TasksProvider = ({ children }) => {
     }
 
     const getTasksByUserForDate = (uid, dateObj) => {
-
         const iso = useMemo(() => format(dateObj, "yyyy-MM-dd"), [dateObj])
         return useMemo(() => {
             return tasks.filter(task => task.ownerId === uid && task.date === iso)

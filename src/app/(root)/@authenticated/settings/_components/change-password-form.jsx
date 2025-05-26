@@ -28,7 +28,7 @@ const formSchema = z.object({
 
 export const ChangePaswordForm = ({ className }) => {
 
-    const { changePassword, loading, user } = useAuth()
+    const { changePassword, loading } = useAuth()
 
     const form = useForm({
         resolver: zodResolver(formSchema),

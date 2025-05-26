@@ -6,27 +6,21 @@ import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog"
 import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -83,16 +77,16 @@ function ProfileForm({ className }) {
     const [message, setMessage] = React.useState("")
 
     const form = useForm({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            email: ""
-        }
+      resolver: zodResolver(formSchema),
+      defaultValues: {
+          email: ""
+      }
     })
 
     const onSubmit = async (values) => {
-        const msg = await sendPasswordReset(values.email)
-        setMessage(msg)
-        setSubmitted(true)
+      const msg = await sendPasswordReset(values.email)
+      setMessage(msg)
+      setSubmitted(true)
     }
 
   return (

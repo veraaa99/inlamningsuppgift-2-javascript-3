@@ -1,15 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { useForm } from "react-hook-form"
 import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
 
 import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,7 +15,6 @@ import {
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/authContext"
 import { getErrorMessage } from "@/lib/getFirebaseError"
-import { ResetPasswordDialog } from "./reset-password-dialog"
 import { usePasswordReset } from "@/context/passwordResetContext"
 
 export const loginFormSchema = z.object({
@@ -32,7 +28,6 @@ export const LoginForm = ({ changeForm, form }) => {
   const { loading, login } = useAuth()
   const { setOpen } = usePasswordReset()
 
-
   async function onSubmit(values) {
     try {
       await login(values.email, values.password)
@@ -40,7 +35,6 @@ export const LoginForm = ({ changeForm, form }) => {
       const errorMessage = getErrorMessage(err.code)
       setErrorMessage(errorMessage)
     }
-    console.log(values)
   }
 
   return (

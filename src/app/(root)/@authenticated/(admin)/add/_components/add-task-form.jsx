@@ -1,5 +1,3 @@
-// TODO: 
-// Koppla till rätt databas
 "use client"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -77,7 +75,6 @@ const formSchema = z.discriminatedUnion("reoccuring", [
     range
 ])
 
-
 export const AddTaskForm = ({ isModal }) => {
   
   const searchParams = useSearchParams()
@@ -91,11 +88,6 @@ export const AddTaskForm = ({ isModal }) => {
   const [errorMessage, setErrorMessage] = useState(null)
   
   const router = useRouter()
-  
-  useEffect(() => {
-  console.log(loading)
-  console.log(submitted)
-}, [])
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -114,38 +106,38 @@ export const AddTaskForm = ({ isModal }) => {
   async function onSubmit(values) {
 
     const base = {
-        title: values.title,
-        ownerId: values.ownerId,
-        time: values.time,
+      title: values.title,
+      ownerId: values.ownerId,
+      time: values.time,
     }
 
     try {
       setSubmitted(true)
 
       if(values.reoccuring === "none") {
-        const test = new Date(values.date)
-        const test2 = test.toLocaleDateString()
+        const date = new Date(values.date)
+        const dateString = date.toLocaleDateString()
         
-        await addTask({ ...base, date: values.date, deadline: (test2 + ' ' + values.time)})
+        await addTask({ ...base, date: values.date, deadline: (dateString + ' ' + values.time)})
       }
       if(values.reoccuring === "multiple") {
-        const bla = values.dateMultiple[values.dateMultiple.length - 1];
+        const lastDate = values.dateMultiple[values.dateMultiple.length - 1];
 
-        const test = new Date(bla)
-        const test2 = test.toLocaleDateString()
+        const date = new Date(lastDate)
+        const dateString = date.toLocaleDateString()
 
         await Promise.all(
-          values.dateMultiple.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
+          values.dateMultiple.map(d => addTask({ ...base, date: d, deadline: (dateString + ' ' + values.time)}))
         )
       }
       if(values.reoccuring === "range") {
         const days = eachDayOfInterval({ start: values.dateRange.from, end: values.dateRange.to })
 
-        const test = new Date(values.dateRange.to)
-        const test2 = test.toLocaleDateString()
+        const date = new Date(values.dateRange.to)
+        const dateString = date.toLocaleDateString()
 
         await Promise.all(
-          days.map(d => addTask({ ...base, date: d, deadline: (test2 + ' ' + values.time)}))
+          days.map(d => addTask({ ...base, date: d, deadline: (dateString + ' ' + values.time)}))
         )
       }
 
@@ -273,6 +265,7 @@ export const AddTaskForm = ({ isModal }) => {
           )}
         />
 
+        {/* Timepicker taken from: */}
         {/* https://daypicker.dev/guides/timepicker */}
         <FormField
           control={form.control}

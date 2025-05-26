@@ -26,7 +26,6 @@ export const ColorPicker = ({ className, user }) => {
         <div className={cn("w-20 relative", className)}>
             <Button className="p-2 border-2 border-primary/50" variant="outline" onClick={() => setIsOpen(!isOpen)}>
                 <div className="w-12 h-5 rounded border-2 border-transparent" style={{ backgroundColor: color }}>
-
                 </div>
             </Button>
         </div>

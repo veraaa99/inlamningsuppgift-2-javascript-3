@@ -5,7 +5,7 @@ import { useAuth } from "@/context/authContext";
 import { db, storage } from "@/lib/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Loader2Icon, LoaderIcon } from "lucide-react";
+import { LoaderIcon } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -118,12 +118,3 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
     </div>
   )
 }
-
-
-
-// export const SettingsForm = ({ userProfile, isOwnUser }) {
-// const bla = "Hej"
-// <ProfileImageUploader user={userProfile} isOwnUser={bla}/>
-// }
-
-// export const ProfileImageUploader = ({ user, isOwnUser})

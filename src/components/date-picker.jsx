@@ -14,13 +14,13 @@ export const DatePicker = ({ date, onDateChange }) => {
         <PopoverTrigger asChild>
             <Button variant="outline">
                 {
-                    isToday(date)
-                    ? "Today"
-                    : isTomorrow(date)
-                        ? "Tomorrow"
-                        : isYesterday(date)
-                            ? "Yesterday"
-                            : format(date, "PPP", { locale: sv })
+                  isToday(date)
+                  ? "Today"
+                  : isTomorrow(date)
+                      ? "Tomorrow"
+                      : isYesterday(date)
+                          ? "Yesterday"
+                          : format(date, "PPP", { locale: sv })
                 }
             </Button>
         </PopoverTrigger>

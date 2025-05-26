@@ -5,16 +5,13 @@ import { useAuth } from "@/context/authContext"
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
 import { useUsers } from "@/context/usersContext"
 import { Badge } from "@/components/ui/badge"
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
 export const UserRolesManager = () => {

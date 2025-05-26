@@ -32,19 +32,20 @@ export const TaskColumn = ({ user, date, className }) => {
     const { isAdmin } = useAuth()
 
     const handleComplete = async(task) => {
-        completeTask(task.id)
-        if(tasks.length > 0 && notCompleted.length === 1){
-          showConfetti()
-        }
+      completeTask(task.id)
+      if(tasks.length > 0 && notCompleted.length === 1){
+        showConfetti()
+      }
     }
 
     const startReorder = () => {
-      const deep = tasks
+      const deep = tasks.map(t => ({ ...t }))
+
         // .filter(t => !t.completed)
-        .map(t => ({ ...t }))
 
         movedTasks.current = []
         setLocalTasks(deep)
+        setIsReordering(true)
     }
 
     const handleCheckChange = (checked) => {
@@ -55,7 +56,7 @@ export const TaskColumn = ({ user, date, className }) => {
         })
         
       if(payload.length > 0) {
-        saveReorder(localTasks)
+        saveReorder(localTasks, payload)
       }
       } else {
         startReorder()
@@ -106,8 +107,8 @@ export const TaskColumn = ({ user, date, className }) => {
             isReordering
             ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
             : <TaskList tasks={tasks} accentColor={accentColor} handleComplete={handleComplete}/>
-            // <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
-            // <TaskList tasks={notCompleted} accentColor={accentColor} handleComplete={handleComplete}/>
+            // ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
+            // : <TaskList tasks={notCompleted} accentColor={accentColor} handleComplete={handleComplete}/>
           }
         </div>
         {

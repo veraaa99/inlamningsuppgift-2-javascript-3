@@ -10,7 +10,6 @@ describe("DatePicker", () => {
 
         // ACT
         const datePickerElement = screen.getByText("Today")
-        // const datePickerElement = screen.getByText(/Idag/i) // i = case Insensitive
 
         // ASSERT
         expect(datePickerElement).toBeInTheDocument()
