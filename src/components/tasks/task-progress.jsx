@@ -4,7 +4,7 @@ import { TaskSettingsDialog } from "./task-settings-dialog"
 
 export const TaskProgress = ({ total = 0, completed= 0, className, user, accentColor }) => {
 
-    const progress = (completed / total) * 100
+  const progress = (completed / total) * 100
 
   return (
     <div className={cn("", className)}>

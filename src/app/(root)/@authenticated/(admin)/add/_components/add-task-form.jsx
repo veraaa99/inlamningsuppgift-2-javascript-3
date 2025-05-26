@@ -37,8 +37,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { useRouter, useSearchParams } from "next/navigation"
-import { eachDayOfInterval, eachHourOfInterval, eachMinuteOfInterval, getHours, getMinutes, parse, setHours, setMinutes } from "date-fns"
-import { useEffect, useState } from "react"
+import { eachDayOfInterval, parse } from "date-fns"
+import { useState } from "react"
 import { useUsers } from "@/context/usersContext"
 import { Calendar } from "@/components/ui/calendar"
 import { useTasks } from "@/context/tasksContext"

@@ -23,9 +23,9 @@ export const UserRolesManager = () => {
 
   return (
     <div className="mt-15">
-        <div className="mb-15"> 
+        <div className="mb-10"> 
             <p className="font-semibold text-lg text-center">Admin</p>
-            <p className="text-sm text-muted-foreground">Change users' access roles</p>
+            <p className="text-sm text-muted-foreground mt-5">Change users' access roles: </p>
         </div>
          <Table>
             <TableHeader>

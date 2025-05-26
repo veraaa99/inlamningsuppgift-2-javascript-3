@@ -82,8 +82,6 @@ export const TasksProvider = ({ children }) => {
 
     const saveReorder = async (orderedTasks, moved) => {
         setLoading(true)
-        console.log(moved)
-        console.log(orderedTasks)
 
         const prevTasks = tasks
 

@@ -35,7 +35,6 @@ export const TaskReorder = ({ tasks, setTasks, movedTasks, accentColor }) => {
   return (
     <Reorder.Group
         axis="y"
-        // as="ul"
         values={tasks}
         onReorder={handleReorder}
         className="space-y-3 w-full"
@@ -43,7 +42,6 @@ export const TaskReorder = ({ tasks, setTasks, movedTasks, accentColor }) => {
         {
             tasks.map(task => (
                 <Reorder.Item
-                    // as="li"
                     key={task.id}
                     onDragStart={() => setActive(task.id)}
                     onDragEnd={() => setActive(null)}

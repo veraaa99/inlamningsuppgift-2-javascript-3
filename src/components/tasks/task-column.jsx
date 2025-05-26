@@ -41,11 +41,9 @@ export const TaskColumn = ({ user, date, className }) => {
     const startReorder = () => {
       const deep = tasks.map(t => ({ ...t }))
 
-        // .filter(t => !t.completed)
-
-        movedTasks.current = []
-        setLocalTasks(deep)
-        setIsReordering(true)
+      movedTasks.current = []
+      setLocalTasks(deep)
+      setIsReordering(true)
     }
 
     const handleCheckChange = (checked) => {
@@ -107,8 +105,6 @@ export const TaskColumn = ({ user, date, className }) => {
             isReordering
             ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
             : <TaskList tasks={tasks} accentColor={accentColor} handleComplete={handleComplete}/>
-            // ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
-            // : <TaskList tasks={notCompleted} accentColor={accentColor} handleComplete={handleComplete}/>
           }
         </div>
         {

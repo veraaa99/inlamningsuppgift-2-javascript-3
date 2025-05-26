@@ -10,15 +10,15 @@ import { ResetPasswordDialog } from "./reset-password-dialog"
 
 export const AuthFormView = () => {
 
-    const [showLogin, setShowLogin] = useState(true)
+  const [showLogin, setShowLogin] = useState(true)
 
-    const changeForm = (formName) => {
-        if(formName == "login") {
-            setShowLogin(true)
-        } else if (formName === "register") {
-            setShowLogin(false)
-        }
+  const changeForm = (formName) => {
+    if(formName == "login") {
+        setShowLogin(true)
+    } else if (formName === "register") {
+        setShowLogin(false)
     }
+  }
 
   const loginForm = useForm({
     resolver: zodResolver(loginFormSchema),
