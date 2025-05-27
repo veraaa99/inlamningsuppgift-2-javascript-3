@@ -22,10 +22,10 @@ export const UserRolesManager = () => {
     if(!isAdmin()) return null
 
   return (
-    <div className="mt-15">
+    <div className="mt-15 xl:mx-20">
         <div className="mb-10"> 
             <p className="font-semibold text-lg text-center">Admin</p>
-            <p className="text-sm text-muted-foreground mt-5">Change users' access roles: </p>
+            <p className="text-sm text-muted-foreground mt-5 text-center">Change users' access roles: </p>
         </div>
          <Table>
             <TableHeader>
@@ -47,7 +47,7 @@ export const UserRolesManager = () => {
                     </TableCell>
                     <TableCell>
                         <Badge className={ user.role === "admin" && "bg-blue-600 text-white" }>
-                            { user.role === "admin" ? "Admin" : "Users"}
+                            { user.role === "admin" ? "Admin" : "User"}
                         </Badge>
                     </TableCell>
                      <TableCell className="text-right">

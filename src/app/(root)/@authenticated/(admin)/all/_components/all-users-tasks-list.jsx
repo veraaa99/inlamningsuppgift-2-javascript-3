@@ -16,7 +16,7 @@ export const AllUsersTasksList = () => {
         {
           !!users.length && users.map(user => {
               if(user.verified){
-                return <TaskColumn key={user.uid} date={selectedDate} user={user} className="w-72"/>
+                return <TaskColumn key={user.uid} date={selectedDate} user={user} className="w-70 xl:w-80"/>
               }
           })
         }

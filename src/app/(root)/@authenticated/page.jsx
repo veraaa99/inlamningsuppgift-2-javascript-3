@@ -15,7 +15,7 @@ function HomePage() {
   
   return (
     <>
-      <h2 className="text-center text-2xl mb-5 font-bold">My schedule</h2>
+      <h2 className="text-center text-4xl  mb-10 font-light">My schedule</h2>
       <Header />
       <div className="mt-10 pb-20">
         <TaskColumn date={selectedDate} user={user}/>

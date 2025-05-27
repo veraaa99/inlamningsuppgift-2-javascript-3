@@ -74,14 +74,14 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
   }
 
   return (
-    <div>
+    <>
       {
         preview 
         ? (
           <>
             <div className="relative">
               <label htmlFor="image-pick" className="block border rounded-lg aspect-square sm:w-80 overflow-hidden">
-                <Image alt="Profilbild" src={preview} width={320} height={320} className="object-cover w-full h-full"/>
+                <Image alt="Profile pic" src={preview} width={320} height={320} className="object-cover w-full h-full"/>
                 <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-radial from-transparent from-70% to-black/60 to-70%"/>
               </label>
               {
@@ -106,7 +106,7 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
         )
         : (
           <label htmlFor="image-pick" 
-            className="border border-foreground/30 rounded-lg aspect-square flex items-center justify-center bg-gray-500/20 hover:bg-foreground/30 transition-colors cursor-pointer sm:w-80 mx-auto p-10 group"
+            className="border border-foreground/30 rounded-lg aspect-square flex items-center justify-center bg-gray-500/20 hover:bg-foreground/30 transition-colors cursor-pointer w-90 sm:w-80 p-10 group"
           >
             <p className="text-muted-foreground group-hover:text-foreground transition-colors">Upload image</p>
           </label>
@@ -114,6 +114,6 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
       }
       { error && <p className="text-red-500 text-sm">{ error }</p> }
       <input type="file" id="image-pick" accepts="image/*" className="hidden" onChange={onPickImage}/>
-    </div>
+    </>
   )
 }

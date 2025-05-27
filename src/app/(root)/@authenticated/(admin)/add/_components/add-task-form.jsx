@@ -164,7 +164,7 @@ export const AddTaskForm = ({ isModal }) => {
             <FormItem>
               <FormLabel>Work task</FormLabel>
               <FormControl>
-                <Input {...field} />
+                <Input className="w-80 md:w-full" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -183,7 +183,7 @@ export const AddTaskForm = ({ isModal }) => {
                       variant="outline"
                       role="combobox"
                       className={cn(
-                        "w-52 justify-between",
+                        "w-80 justify-between md:w-100",
                         !field.value && "text-muted-foreground"
                       )}
                     >
@@ -196,7 +196,7 @@ export const AddTaskForm = ({ isModal }) => {
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
-                <PopoverContent className="w-52 p-0">
+                <PopoverContent className="w-80 p-0">
                   <Command>
                     <CommandInput
                       placeholder="Search user..."
@@ -229,9 +229,6 @@ export const AddTaskForm = ({ isModal }) => {
                   </Command>
                 </PopoverContent>
               </Popover>
-              <FormDescription>
-                This is the language that will be used in the dashboard.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -245,7 +242,7 @@ export const AddTaskForm = ({ isModal }) => {
               <FormLabel>Frequency</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
-                  <SelectTrigger className="w-full sm:w-52">
+                  <SelectTrigger className="w-80 md:w-100">
                     <SelectValue placeholder="Select frequency" />
                   </SelectTrigger>
                 </FormControl>
@@ -255,11 +252,11 @@ export const AddTaskForm = ({ isModal }) => {
                   <SelectItem value="range">From - To</SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>
+              {/* <FormDescription>
                 { reoccuringType === "none" && "Select the frequency of the work task. If you choose 'Once', the task will only be active during one selected date." }
                 { reoccuringType === "multiple" && "Select multiple days for the task to be active" }
                 { reoccuringType === "range" && "Select a start and an end date for the task. The task will be repeated every day between these two dates." }
-              </FormDescription>
+              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
@@ -270,12 +267,14 @@ export const AddTaskForm = ({ isModal }) => {
         <FormField
           control={form.control}
           name="time"
+          className="md:flex flex-inline"
           render={({ field }) => (
               <FormItem>
               <FormLabel>Select deadline:</FormLabel>
                 <input type="time"
                   value={field.value} 
                   onChange={field.onChange}
+                  className="w-50 cursor-pointer"
                   />
               <FormMessage />
             </FormItem>
@@ -289,12 +288,13 @@ export const AddTaskForm = ({ isModal }) => {
             name="date"
             render={({ field }) => (
                 <FormItem>
+                  <FormLabel>Select date:</FormLabel>
                     <Calendar
                     mode="single"
                     selected={field.value}
                     onSelect={field.onChange}
                     />
-                <FormMessage />
+                  <FormMessage />
                 </FormItem>
             )}
           />
@@ -306,6 +306,7 @@ export const AddTaskForm = ({ isModal }) => {
             name="dateMultiple"
             render={({ field }) => (
                 <FormItem>
+                  <FormLabel>Select dates:</FormLabel>
                     <Calendar
                     mode="multiple"
                     selected={field.value}
@@ -323,6 +324,7 @@ export const AddTaskForm = ({ isModal }) => {
             name="dateRange"
             render={({ field }) => (
               <FormItem>
+                <FormLabel>Select dates:</FormLabel>
                     <Calendar
                     mode="range"
                     selected={field.value}

@@ -6,13 +6,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { sv } from "date-fns/locale"
 
 export const DatePicker = ({ date, onDateChange }) => {
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <Button variant="outline">
+            <Button variant="Ghost">
                 {
                   isToday(date)
                   ? "Today"
@@ -20,7 +19,7 @@ export const DatePicker = ({ date, onDateChange }) => {
                       ? "Tomorrow"
                       : isYesterday(date)
                           ? "Yesterday"
-                          : format(date, "PPP", { locale: sv })
+                          : format(date, "PPP")
                 }
             </Button>
         </PopoverTrigger>

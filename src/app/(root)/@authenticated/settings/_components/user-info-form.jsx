@@ -46,6 +46,7 @@ export const UserInfoForm = ({ user }) => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-10">
+        <h3 className="text-lg text-center">Change username and profile pic:</h3>
         
         <FormField
           control={form.control}
@@ -75,7 +76,7 @@ export const UserInfoForm = ({ user }) => {
           )}
         />
 
-        <Button disabled={loading} type="submit" className="self-end">{ loading ? "Loading..." : "Change"}</Button>
+        <Button disabled={loading} type="submit" className="self-start">{ loading ? "Loading..." : "Change"}</Button>
       </form>
     </Form>
   )

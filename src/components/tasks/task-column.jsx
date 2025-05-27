@@ -19,6 +19,7 @@ export const TaskColumn = ({ user, date, className }) => {
 
     const [isReordering, setIsReordering] = useState(false)
     const [localTasks, setLocalTasks] = useState([])
+    const [filterTasks, setFilterTasks] = useState()
 
     const movedTasks = useRef([])
 
@@ -27,7 +28,11 @@ export const TaskColumn = ({ user, date, className }) => {
 
     const tasks = getTasksByUserForDate(user.uid, date)
 
-    const notCompleted = tasks.filter(task => !task.completed)
+    // const notCompleted = tasks.filter(task => !task.completed)
+    // const completed = tasks.filter(task => !task.completed)
+
+    const notCompleted = tasks.filter(task => !task.completed).map(t => ({ ...t }))
+    const completed = tasks.filter(task => task.completed).map(t => ({ ...t }))
 
     const { isAdmin } = useAuth()
 
@@ -46,6 +51,16 @@ export const TaskColumn = ({ user, date, className }) => {
       setIsReordering(true)
     }
 
+    // const filtertasks = (tasksToFilter) => {
+    //   setFilterTasks(tasksToFilter)
+    // }
+
+    // const filterCompleted = () => {
+    //   const deep = tasks.filter(task => task.completed).map(t => ({ ...t }))
+
+    //   setFilterTasks(deep)
+    // }
+
     const handleCheckChange = (checked) => {
       if(!checked) {
         const payload = movedTasks.current.filter(mt => {
@@ -62,15 +77,13 @@ export const TaskColumn = ({ user, date, className }) => {
       setIsReordering(checked)
     }
 
-    const bgColor = user.color ?? "#ffffff"
+    const bgColor = "#083344"
     const textColor = getReadableTextColor(bgColor)
 
-    const columnStyle = user.color
-    ? {
+    const columnStyle = {
       backgroundColor: bgColor,
       color: textColor
     }
-    : undefined
 
     const accentColor = 
       textColor === "#000000"
@@ -84,7 +97,7 @@ export const TaskColumn = ({ user, date, className }) => {
 
 
   return (
-    <div className={cn("bg-foreground/20 max-w-96 p-5 mx-auto rounded-xl flex flex-col", className)}
+    <div className={cn("bg-foreground/20 max-w-96 p-5 mx-auto rounded-lg flex flex-col", className)}
     style={columnStyle}
     >
         <TaskProgress total={tasks.length} user={user} accentColor={accentColorIntense} completed={tasks.length - notCompleted.length} className="mb-5"/>
@@ -100,19 +113,37 @@ export const TaskColumn = ({ user, date, className }) => {
             </div>
           )
         }
+        <div className="mb-5">
+          <span className="font-medium">Filter</span>
+          <div className="flex mt-2">
+            <Button className="w-full" variant="outline" onClick={() => setFilterTasks(tasks)}>
+            Show all
+          </Button>
+          </div>
+          <div className="flex flex-row justify-between mt-2 xl:justify-around">
+            <Button variant="outline" onClick={() => setFilterTasks(completed)}>
+              Completed
+            </Button>
+            <Button variant="outline" onClick={() => setFilterTasks(notCompleted)}>
+              Not completed
+            </Button>
+          </div>
+        </div>
         <div className="flex-1">
           {
             isReordering
             ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
-            : <TaskList tasks={tasks} accentColor={accentColor} handleComplete={handleComplete}/>
+              : filterTasks
+                ? <TaskList tasks={filterTasks} accentColor={accentColor} handleComplete={handleComplete}/>
+                : <TaskList tasks={tasks} accentColor={accentColor} handleComplete={handleComplete}/>
           }
         </div>
         {
           isAdmin() && (
             <div className="flex items-center justify-center mt-6">
               <Button asChild
-              variant="icon"
-              className="border-4 border-primary rounded-full p-2 size-12 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
+              variant="outline"
+              className="border-2 border-primary rounded-lg size-10 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
               style={{ borderColor: accentColorIntense, color: textColor, "--track": accentColor}}
               >
                 <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Add new work task">

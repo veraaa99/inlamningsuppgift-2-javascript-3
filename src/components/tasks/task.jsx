@@ -7,13 +7,13 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
   return (
     <Delay delay={ 100 * index }>
       <motion.div 
-        initial={{ opacity: 0, x: -100 }}
+        initial={{ opacity: 0, y: -100 }}
         transition={{
-          x: { type: "spring", bounce: 0, duration: 0.5 },
+          y: { type: "spring", bounce: 0, duration: 0.5 },
           opacity: { duration: 0.4 }
         }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 100 }}
         key={task.id}
         className="p-4 shadow-sm bg-background rounded-lg cursor-pointer"
         onClick={() => handleComplete(task)}

@@ -28,7 +28,7 @@ export const Header = () => {
 
   return (
     <div className="flex items-center justify-center gap-4">
-        <Button variant="outline" onClick={() => navigateToDate(addDays(selectedDate, -1))}>
+        <Button variant="outline" size="icon" onClick={() => navigateToDate(addDays(selectedDate, -1))}>
             <ChevronLeftIcon />
         </Button>
 
@@ -37,7 +37,7 @@ export const Header = () => {
             onDateChange={navigateToDate}
         />
 
-        <Button variant="outline" onClick={() => navigateToDate(addDays(selectedDate, 1))}>
+        <Button variant="outline" size="icon" onClick={() => navigateToDate(addDays(selectedDate, 1))}>
             <ChevronRightIcon />
         </Button>
     </div>
