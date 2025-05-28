@@ -7,7 +7,7 @@ import { Button } from "./ui/button"
 import { AvatarDropdown } from "./avatar-dropdown"
 import { useAuth } from "@/context/authContext"
 import { useSearchParams } from "next/navigation"
-import { format, parse } from "date-fns"
+import { format } from "date-fns"
 
 const poppins = Poppins({
     subsets:["latin"],
@@ -31,8 +31,8 @@ export const Navbar = () => {
             <Link className={cn("text-3xl font-bold hidden sm:block xl:text-4xl", poppins.className)} href="/"><h1>Workhandler</h1></Link>
             <Link className={cn("text-4xl font-bold block sm:hidden", poppins.className)} href="/">W</Link>
             <div className="flex mt-1">
-                <h2 className="font-bold hidden sm:block">{ todayFormattedLong }</h2>
-                    <h2 className="font-bold block sm:hidden">{ todayFormattedShort }</h2>
+                <h2 className="font-bold block sm:hidden">{ todayFormattedLong }</h2>
+                <h2 className="font-bold hidden sm:block">{ todayFormattedShort }</h2>
             </div>
         </div>
         <div className="flex items-center gap-2">
@@ -62,7 +62,6 @@ export const Navbar = () => {
                     </>
                 )
             }
-
             <AvatarDropdown />
         </div>
         

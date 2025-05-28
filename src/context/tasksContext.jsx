@@ -120,10 +120,13 @@ export const TasksProvider = ({ children }) => {
             })
         } catch (error) {
             console.error("Error when updating work task: ", error)
+            toast.error("Something went wrong. Please try again")
         } finally {
             setLoading(false)
         }
     }
+
+    
 
     const values = {
         addTask,

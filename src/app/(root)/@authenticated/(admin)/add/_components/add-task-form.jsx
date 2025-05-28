@@ -6,7 +6,6 @@ import { z } from "zod"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -252,11 +251,6 @@ export const AddTaskForm = ({ isModal }) => {
                   <SelectItem value="range">From - To</SelectItem>
                 </SelectContent>
               </Select>
-              {/* <FormDescription>
-                { reoccuringType === "none" && "Select the frequency of the work task. If you choose 'Once', the task will only be active during one selected date." }
-                { reoccuringType === "multiple" && "Select multiple days for the task to be active" }
-                { reoccuringType === "range" && "Select a start and an end date for the task. The task will be repeated every day between these two dates." }
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}

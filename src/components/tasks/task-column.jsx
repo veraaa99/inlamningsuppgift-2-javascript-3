@@ -2,44 +2,47 @@
 
 import { cn } from "@/lib/utils"
 import { TaskList } from "./task-list"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useTasks } from "@/context/tasksContext"
 import { useAuth } from "@/context/authContext"
 import { Switch } from "../ui/switch"
 import { TaskProgress } from "./task-progress"
 import { TaskReorder } from "./task-reorder"
-import { useConfetti } from "@/context/confettiContext"
+// import { useConfetti } from "@/context/confettiContext"
 import { getReadableTextColor, shade } from "@/utils/color"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import { PlusIcon } from "lucide-react"
 import { format } from "date-fns"
+import toast from "react-hot-toast"
 
 export const TaskColumn = ({ user, date, className }) => {
 
     const [isReordering, setIsReordering] = useState(false)
     const [localTasks, setLocalTasks] = useState([])
-    const [filterTasks, setFilterTasks] = useState()
+    const [filterTasks, setFilterTasks] = useState([])
+    const [inactivateSort, setInactivateSort] = useState(false)
+    const [showEmptyList, setShowEmptyList] = useState(false)
 
     const movedTasks = useRef([])
 
+    useEffect(() => {
+      showAllTasks()
+    }, [date])
+
     const { getTasksByUserForDate, completeTask, saveReorder } = useTasks()
-    const { showConfetti } = useConfetti()
 
     const tasks = getTasksByUserForDate(user.uid, date)
 
-    // const notCompleted = tasks.filter(task => !task.completed)
-    // const completed = tasks.filter(task => !task.completed)
-
-    const notCompleted = tasks.filter(task => !task.completed).map(t => ({ ...t }))
-    const completed = tasks.filter(task => task.completed).map(t => ({ ...t }))
+    let notCompleted = tasks.filter(task => !task.completed).map(t => ({ ...t }))
+    let completed = tasks.filter(task => task.completed).map(t => ({ ...t }))
 
     const { isAdmin } = useAuth()
 
     const handleComplete = async(task) => {
       completeTask(task.id)
       if(tasks.length > 0 && notCompleted.length === 1){
-        showConfetti()
+        toast.success(`${user.displayName}: All tasks completed for the day!`)
       }
     }
 
@@ -49,17 +52,8 @@ export const TaskColumn = ({ user, date, className }) => {
       movedTasks.current = []
       setLocalTasks(deep)
       setIsReordering(true)
+      console.log(localTasks)
     }
-
-    // const filtertasks = (tasksToFilter) => {
-    //   setFilterTasks(tasksToFilter)
-    // }
-
-    // const filterCompleted = () => {
-    //   const deep = tasks.filter(task => task.completed).map(t => ({ ...t }))
-
-    //   setFilterTasks(deep)
-    // }
 
     const handleCheckChange = (checked) => {
       if(!checked) {
@@ -76,6 +70,41 @@ export const TaskColumn = ({ user, date, className }) => {
       }
       setIsReordering(checked)
     }
+
+    const filterCompletedTasks = () => {
+
+      setInactivateSort(true)
+
+      if(completed.length == 0){
+        setFilterTasks([])
+        setShowEmptyList(true)
+        return
+      }
+      setFilterTasks(completed)
+      setShowEmptyList(false)
+
+    }
+
+     const filterNotCompletedTasks = () => {
+
+      setInactivateSort(true)
+
+       if(notCompleted.length == 0){
+        setFilterTasks([])
+        setShowEmptyList(true)
+        console.log(filterTasks)
+        return
+      }
+      setFilterTasks(notCompleted)
+      setShowEmptyList(false)
+    }
+
+     const showAllTasks = () => {
+        setInactivateSort(false)        
+        setFilterTasks([])
+        setShowEmptyList(false)
+        return
+      }
 
     const bgColor = "#083344"
     const textColor = getReadableTextColor(bgColor)
@@ -95,14 +124,14 @@ export const TaskColumn = ({ user, date, className }) => {
         ? shade(bgColor, -60)
         : shade(bgColor, 60)
 
-
   return (
     <div className={cn("bg-foreground/20 max-w-96 p-5 mx-auto rounded-lg flex flex-col", className)}
     style={columnStyle}
     >
         <TaskProgress total={tasks.length} user={user} accentColor={accentColorIntense} completed={tasks.length - notCompleted.length} className="mb-5"/>
         {
-          isAdmin && (
+          isAdmin && !inactivateSort
+          ?
             <div className="flex items-center justify-between mb-5" style={{ "--track": accentColorIntense ?? "#99a1af" }}>
               <span className="font-medium">Sort</span>
               <Switch 
@@ -111,29 +140,33 @@ export const TaskColumn = ({ user, date, className }) => {
               className="data-[state=unchecked]:bg-[color:var(--track)] dark:data-[state=unchecked]:bg-[color:var(--track)] border border-[color:var(--track)]"
               />
             </div>
-          )
+          :
+          <div>
+          </div>
         }
         <div className="mb-5">
           <span className="font-medium">Filter</span>
           <div className="flex mt-2">
-            <Button className="w-full" variant="outline" onClick={() => setFilterTasks(tasks)}>
-            Show all
+            <Button className="w-full" variant="outline" onClick={() => showAllTasks()}>
+            Show all / Sort tasks
           </Button>
           </div>
-          <div className="flex flex-row justify-between mt-2 xl:justify-around">
-            <Button variant="outline" onClick={() => setFilterTasks(completed)}>
+          <div className="grid grid-cols-2 mt-2 gap-2">
+            <Button variant="outline" onClick={() => filterCompletedTasks()}>
               Completed
             </Button>
-            <Button variant="outline" onClick={() => setFilterTasks(notCompleted)}>
+            <Button variant="outline" onClick={() => filterNotCompletedTasks()}>
               Not completed
             </Button>
           </div>
         </div>
         <div className="flex-1">
           {
-            isReordering
+            isReordering 
             ? <TaskReorder tasks={localTasks} accentColor={accentColor} setTasks={setLocalTasks} movedTasks={movedTasks} />
-              : filterTasks
+            : filterTasks.length == 0 && showEmptyList
+              ? <></>
+              : filterTasks.length > 0
                 ? <TaskList tasks={filterTasks} accentColor={accentColor} handleComplete={handleComplete}/>
                 : <TaskList tasks={tasks} accentColor={accentColor} handleComplete={handleComplete}/>
           }
