@@ -41,7 +41,6 @@ export const AuthProvider = ({ children }) => {
 
                 await new Promise(resolve => setTimeout(resolve, delay))
             }
-
             return docSnap
         }
 
@@ -53,7 +52,6 @@ export const AuthProvider = ({ children }) => {
             console.warn("User doc could not be fetched")
             setUser(null)
         }
-
         setAuthLoaded(true)
 
       })
@@ -83,7 +81,6 @@ export const AuthProvider = ({ children }) => {
                 createdAt: Timestamp.now(),
                 photoURL: null,
                 verified: false,
-                color: "#9dedcc"
             })
             
             await verifyEmail()
@@ -127,7 +124,7 @@ export const AuthProvider = ({ children }) => {
             const useRef = doc(db, "users", user.uid)
             await updateDoc(useRef, newUserData)
             setUser((prevUser) => ({ ...prevUser, ...newUserData }))
-            toast.success("Profile updated", { id: toastId})
+            toast.success("Profile name updated", { id: toastId })
             
         } catch (error) {
             toast.error("Something went wrong. Please try again", { id: toastId })

@@ -56,7 +56,7 @@ export const ChangePaswordForm = ({ className }) => {
                 <FormItem>
                 <FormLabel>Current password:</FormLabel>
                 <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" className="not-dark:border-indigo-300" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -70,7 +70,7 @@ export const ChangePaswordForm = ({ className }) => {
                 <FormItem>
                 <FormLabel>New password:</FormLabel>
                 <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" className="not-dark:border-indigo-300" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>
@@ -84,7 +84,7 @@ export const ChangePaswordForm = ({ className }) => {
                 <FormItem>
                 <FormLabel>Confirm password:</FormLabel>
                 <FormControl>
-                    <Input type="password" {...field} />
+                    <Input type="password" className="not-dark:border-indigo-300" {...field} />
                 </FormControl>
                 <FormMessage />
                 </FormItem>

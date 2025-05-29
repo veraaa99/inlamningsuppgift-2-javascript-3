@@ -22,7 +22,7 @@ const formSchema = z.object({
         .min(3, { message: "Username must be at least 3 characters long" })
         .max(50, { messsage: "Username cannot be longer than 50 characters" }),
     email: z.string().email({ message: "Please enter a valid email address" })
-  })
+})
 
 export const UserInfoForm = ({ user }) => {
 

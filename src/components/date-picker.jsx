@@ -12,15 +12,15 @@ export const DatePicker = ({ date, onDateChange }) => {
     <Popover>
         <PopoverTrigger asChild>
             <Button variant="Ghost">
-                {
-                  isToday(date)
-                  ? "Today"
-                  : isTomorrow(date)
-                      ? "Tomorrow"
-                      : isYesterday(date)
-                          ? "Yesterday"
-                          : format(date, "PPP")
-                }
+              {
+                isToday(date)
+                ? "Today"
+                : isTomorrow(date)
+                    ? "Tomorrow"
+                    : isYesterday(date)
+                        ? "Yesterday"
+                        : format(date, "PPP")
+              }
             </Button>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">

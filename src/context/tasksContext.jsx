@@ -77,7 +77,6 @@ export const TasksProvider = ({ children }) => {
         } finally {
             setLoading(false)
         }
-        
     }
 
     const saveReorder = async (orderedTasks, moved) => {
@@ -125,8 +124,6 @@ export const TasksProvider = ({ children }) => {
             setLoading(false)
         }
     }
-
-    
 
     const values = {
         addTask,

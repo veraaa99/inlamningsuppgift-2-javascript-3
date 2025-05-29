@@ -8,13 +8,13 @@ import { useAuth } from "@/context/authContext"
 import { Switch } from "../ui/switch"
 import { TaskProgress } from "./task-progress"
 import { TaskReorder } from "./task-reorder"
-// import { useConfetti } from "@/context/confettiContext"
 import { getReadableTextColor, shade } from "@/utils/color"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import { PlusIcon } from "lucide-react"
 import { format } from "date-fns"
 import toast from "react-hot-toast"
+import { useTheme } from "next-themes"
 
 export const TaskColumn = ({ user, date, className }) => {
 
@@ -25,6 +25,7 @@ export const TaskColumn = ({ user, date, className }) => {
     const [showEmptyList, setShowEmptyList] = useState(false)
 
     const movedTasks = useRef([])
+    const { theme } = useTheme()
 
     useEffect(() => {
       showAllTasks()
@@ -72,7 +73,6 @@ export const TaskColumn = ({ user, date, className }) => {
     }
 
     const filterCompletedTasks = () => {
-
       setInactivateSort(true)
 
       if(completed.length == 0){
@@ -82,11 +82,9 @@ export const TaskColumn = ({ user, date, className }) => {
       }
       setFilterTasks(completed)
       setShowEmptyList(false)
-
     }
 
      const filterNotCompletedTasks = () => {
-
       setInactivateSort(true)
 
        if(notCompleted.length == 0){
@@ -106,7 +104,11 @@ export const TaskColumn = ({ user, date, className }) => {
         return
       }
 
-    const bgColor = "#083344"
+    const bgColor = 
+    theme == 'light'
+    ? "#155e75"
+    : "#083344"
+
     const textColor = getReadableTextColor(bgColor)
 
     const columnStyle = {
@@ -146,16 +148,16 @@ export const TaskColumn = ({ user, date, className }) => {
         }
         <div className="mb-5">
           <span className="font-medium">Filter</span>
-          <div className="flex mt-2">
-            <Button className="w-full" variant="outline" onClick={() => showAllTasks()}>
+          <div className="flex mt-3">
+            <Button className="w-full" variant="outline" style={{ backgroundColor: accentColor }} onClick={() => showAllTasks()}>
             Show all / Sort tasks
           </Button>
           </div>
-          <div className="grid grid-cols-2 mt-2 gap-2">
-            <Button variant="outline" onClick={() => filterCompletedTasks()}>
+          <div className="flex flex-col lg:grid lg:grid-cols-2 mt-2 gap-2 mb-0">
+            <Button className="sm:w-full" variant="outline" style={{ backgroundColor: accentColor }} onClick={() => filterCompletedTasks()}>
               Completed
             </Button>
-            <Button variant="outline" onClick={() => filterNotCompletedTasks()}>
+            <Button className="sm:w-full" variant="outline" style={{ backgroundColor: accentColor }} onClick={() => filterNotCompletedTasks()}>
               Not completed
             </Button>
           </div>
@@ -177,7 +179,7 @@ export const TaskColumn = ({ user, date, className }) => {
               <Button asChild
               variant="outline"
               className="border-2 border-primary rounded-lg size-10 hover:bg-[color:var(--track)] hover:text-secondary transition-colors"
-              style={{ borderColor: accentColorIntense, color: textColor, "--track": accentColor}}
+              style={{ borderColor: accentColorIntense, backgroundColor: accentColor, color: textColor, "--track": accentColor}}
               >
                 <Link href={`/add?date=${format(date, "yyyy-MM-dd")}&userId=${user.uid}`} aria-label="Add new work task">
                   <PlusIcon className="size-5"/>

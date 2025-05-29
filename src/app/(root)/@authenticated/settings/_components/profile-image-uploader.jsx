@@ -82,7 +82,7 @@ export const ProfileImageUploader = ({ user, isOwnUser }) => {
             <div className="relative">
               <label htmlFor="image-pick" className="block border rounded-lg aspect-square sm:w-80 overflow-hidden">
                 <Image alt="Profile pic" src={preview} width={320} height={320} className="object-cover w-full h-full"/>
-                <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-radial from-transparent from-70% to-black/60 to-70%"/>
+                <div className="absolute top-0 left-0 w-full h-full pointer-events-none bg-radial from-transparent from-70% to-black/60 not-dark:to-black/30 to-70% md:w-80"/>
               </label>
               {
                 loading && (

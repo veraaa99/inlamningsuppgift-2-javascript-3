@@ -2,7 +2,6 @@ import { ModeToggle } from "@/components/ui/mode-toggle"
 import { UserInfoForm } from "./user-info-form"
 import { ProfileImageUploader } from "./profile-image-uploader"
 import { ChangePaswordForm } from "./change-password-form"
-import { ColorPicker } from "./color-picker"
 import { UserRolesManager } from "./user-roles-manager"
 
 export const SettingsForm = ({ user, isOwnUser }) => {
@@ -10,29 +9,17 @@ export const SettingsForm = ({ user, isOwnUser }) => {
     <>
         <div className="flex flex-col gap-10 justify-between lg:flex-row">
             <div className="space-y-10 w-full"> 
-                
-                {/* <div className="flex items-center justify-between lg:justify-stretch gap-10">
-                    <p className="font-semibold text-lg">Card color:</p>
-                    <ColorPicker user={user} />
-                </div> */}
-
                 <UserInfoForm user={user}/>
-
                 <div className="flex flex-col gap-10 justify-between">
                     <div className="flex flex-col gap-5">
                         <h3 className="font-semibold text-xl">Profile pic:</h3>
                         <ProfileImageUploader user={user} isOwnUser={isOwnUser}/>
-
                     </div>
-                    
                 </div>
-
             </div>
-            
                 {
-                    isOwnUser && <ChangePaswordForm className="bg-gradient-to-b from-cyan-950 to-transparent w-full"/>
-                }
-                
+                    isOwnUser && <ChangePaswordForm className="bg-gradient-to-b dark:from-cyan-950 not-dark:from-indigo-200 to-transparent w-full"/>
+                } 
         </div>
         {
             isOwnUser && (

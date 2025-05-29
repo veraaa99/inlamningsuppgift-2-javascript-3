@@ -18,8 +18,8 @@ import { getErrorMessage } from "@/lib/getFirebaseError"
 import { usePasswordReset } from "@/context/passwordResetContext"
 
 export const loginFormSchema = z.object({
-    email: z.string().email({ message: "Ange en giltig epostadress" }),
-    password: z.string().nonempty({ message: "Skriv in ett lösenord" })
+    email: z.string().email({ message: "Please enter a valid email address." }),
+    password: z.string().nonempty({ message: "Please enter a password" })
 })
 
 export const LoginForm = ({ changeForm, form }) => {

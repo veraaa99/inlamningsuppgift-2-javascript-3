@@ -3,18 +3,23 @@ import { shade } from "@/utils/color"
 import { isAfter } from "date-fns"
 import { Circle, CircleCheck } from "lucide-react"
 import { motion } from "motion/react"
+import { useTheme } from "next-themes"
 import { useEffect, useState } from "react"
 
 export const Task = ({ task, handleComplete, index, accentColor }) => {
 
   const deadline = new Date(task.deadline)
   const today = new Date()
+  const { theme } = useTheme()
 
   const deadlineHasPassed = isAfter(today, deadline)
   let bgColor = accentColor
 
   if(deadlineHasPassed) {
-    bgColor = "#7c2d12"
+    bgColor =
+    theme == 'light'
+      ? "#9a3412"
+      : "#7c2d12"
   }
 
   return (
@@ -32,13 +37,13 @@ export const Task = ({ task, handleComplete, index, accentColor }) => {
         onClick={() => handleComplete(task)}
         style={{ backgroundColor: bgColor, borderColor: shade(bgColor, 50) }}
         >
-          <div className="flex justify-between">
-            <span className="text-xl font-medium">{task.title}</span>
+          <div className="flex flex-col">
             {
               task.completed 
-              ? <CircleCheck className="self-center"></CircleCheck>
-              : <Circle className="self-center"></Circle>
+              ? <CircleCheck className="self-start mb-2"></CircleCheck>
+              : <Circle className="self-start mb-2"></Circle>
             }
+            <span className="text-lg font-medium taskTitle">{task.title}</span>
           </div>
           <p className="text-sm font-bold mt-3">Deadline: </p>
           <p className="text-sm font-medium">{task.deadline}</p>
