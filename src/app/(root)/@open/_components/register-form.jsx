@@ -40,8 +40,9 @@ export const RegisterForm = ({ changeForm, form }) => {
 
   async function onSubmit(values) {
 
+    // The first user created will automatically be given the "admin"-role.
     try {
-        if( users.length == 0 ) {
+        if( !users || users.length == 0 ) {
             const { email, password, displayName } = values
             const role = "admin"
             await register(email, password, displayName, role)
