@@ -6,6 +6,8 @@ First, create an .env file and paste the required variables to connect to the da
 
 If you're using npm to run the project, make sure to install the necessary modules by running: `run npm install next --legacy-peer-deps`
 
+if the command above does not work, try deleting the package-lock.json file or renaming the project to workhandler, and try again.
+
 Then, run the development server:
 
 ```bash
